@@ -1,0 +1,23 @@
+baseURL = "https://yuya373.github.io/"
+languageCode = "ja-jp"
+title = "blog"
+theme = "temple"
+enableEmoji = true
+hasCJKLanguage = true
+publishDir = "docs"
+
+[params]
+  # Enables syntax highlighting
+  highlight = true
+  # Supports highlighting for languages not included in the original pack
+  # See https://highlightjs.org/download/
+  hjslangs = ["go", "elixir", "scala", "lisp"]
+
+# Builds a list page for each category given
+[taxonomies]
+  tag = "tags"
+  category = "categories"
+
+[author]
+  name = "Yuya Minami"
+  github = "yuya373"

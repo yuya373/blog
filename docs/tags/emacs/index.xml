@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Emacs on blog</title>
+    <link>https://yuya373.github.io/tags/emacs/</link>
+    <description>Recent content in Emacs on blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja-jp</language>
+    <lastBuildDate>Fri, 05 Jan 2018 19:28:35 +0900</lastBuildDate>
+    
+	<atom:link href="https://yuya373.github.io/tags/emacs/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>My First Post</title>
+      <link>https://yuya373.github.io/posts/my-first-post/</link>
+      <pubDate>Fri, 05 Jan 2018 19:28:35 +0900</pubDate>
+      
+      <guid>https://yuya373.github.io/posts/my-first-post/</guid>
+      <description>👍
+object chapter6 { case class Cat(name: String, favoriteFoods: List[String]) }  (setq hello &amp;quot;world&amp;quot;)  </description>
+    </item>
+    
+  </channel>
+</rss>
