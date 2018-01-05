@@ -2,30 +2,30 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on blog</title>
-    <link>https://yuya373.github.io/tags/</link>
+    <link>https://yuya373.github.io/blog/tags/</link>
     <description>Recent content in Tags on blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-jp</language>
     <lastBuildDate>Fri, 05 Jan 2018 19:28:35 +0900</lastBuildDate>
     
-	<atom:link href="https://yuya373.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://yuya373.github.io/blog/tags/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Emacs</title>
-      <link>https://yuya373.github.io/tags/emacs/</link>
+      <link>https://yuya373.github.io/blog/tags/emacs/</link>
       <pubDate>Fri, 05 Jan 2018 19:28:35 +0900</pubDate>
       
-      <guid>https://yuya373.github.io/tags/emacs/</guid>
+      <guid>https://yuya373.github.io/blog/tags/emacs/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Scala</title>
-      <link>https://yuya373.github.io/tags/scala/</link>
+      <link>https://yuya373.github.io/blog/tags/scala/</link>
       <pubDate>Fri, 05 Jan 2018 19:28:35 +0900</pubDate>
       
-      <guid>https://yuya373.github.io/tags/scala/</guid>
+      <guid>https://yuya373.github.io/blog/tags/scala/</guid>
       <description></description>
     </item>
     
