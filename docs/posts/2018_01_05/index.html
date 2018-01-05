@@ -3,8 +3,8 @@
 <head>
   
   <meta charset="utf-8">
-  <title>blog</title>
-  <meta name="description" content="blog">
+  <title>hugoをはじめる</title>
+  <meta name="description" content="hugoをはじめる">
   <meta name="author" content="Yuya Minami">
   
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -336,8 +336,6 @@ body {
 
   
   
-  <link href="https://yuya373.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="blog Feed" />
-  
 
   <meta name="generator" content="Hugo 0.31.1" />
   
@@ -375,65 +373,67 @@ body {
 
 <div class="pure-g">
   <div class="pure-u-1-24 pure-u-md-1-6"></div>
-	<div class="pure-u-11-12 pure-u-md-2-3">
-	<div class="post-content">
-	
-	  <p class="posts-name">Recent posts:</p>
+  <div class="pure-u-11-12 pure-u-md-2-3">
+    <div class="post">
 
-	  <ul class="posts">
-		
-		
-		
-		<li>
-		  
-		  <a class="post-list" href="https://yuya373.github.io/blog/posts/2018_01_05/">hugoをはじめる</a>
+      <div class="post-title">
+        <p class="footnote">
+        <time class="">01-05-2018</time>
+        
+        
+        |
+        
+        
+        tags: [ <a href="https://yuya373.github.io/blog/tags/emacs">emacs</a> ]
+        
 
-		  <p class="footnote">
-			<time datetime="01-05-2018T20:58:13&#43;09:00">01-05-2018</time>
+        
 
-			
-		  |	
-			
+        
+        </p>
+        <h1>hugoをはじめる</h1>
+      </div>
 
-			
-			tags: [ <a href="https://yuya373.github.io/blog/tags/emacs">emacs</a> ]
-			
+      <div class="post-content">
+        <p><a href="http://anemone.dodgson.org/">steps to phantasien</a> のブログを見ていけてるなと思いhugoにたどりついた。
+結局、テーマは <a href="https://github.com/aos/temple">aos/temple: A fast, minimal, responsive theme for Hugo</a> にした。</p>
 
-			
+<p>Emacsに <a href="https://github.com/masasam/emacs-easy-hugo">easy-hugo</a> をインストールした。
+設定をした。
+タイトルを考えるのがめんどくさくて書くのをやめてしまうのでとりあえず今日の年月日をタイトルにする関数を書いた。
+あとhelmでpostsを見る関数も書いた。</p>
 
-			
+<pre><code class="language-emacs-lisp">(use-package easy-hugo
+  :commands (easy-hugo easy-hugo-newpost)
+  :init
+  (setq easy-hugo-postdir &quot;content/posts&quot;)
+  (setq easy-hugo-basedir &quot;~/dev/blog/&quot;)
+  (defun easy-hugo-list-posts ()
+    (interactive)
+    (helm-find-files-1 (expand-file-name
+                        (format &quot;%s%s/&quot;
+                                easy-hugo-basedir
+                                easy-hugo-postdir))))
+  (defun easy-hugo-newpost-today  ()
+    (interactive)
+    (let ((format &quot;%Y_%m_%d&quot;))
+      (easy-hugo-newpost
+       (format &quot;%s.md&quot;
+               (format-time-string format))))))
+</code></pre>
 
-		  </p>
-		</li>
-		
-		
-		
-		<li>
-		  
-		  <a class="post-list" href="https://yuya373.github.io/blog/posts/my-first-post/">My First Post</a>
+<p><code>easy-hugo</code>を<code>eash-hugo</code>とタイポするので <kbd>Space</kbd> <kbd>h</kbd> <kbd>u</kbd> にマッピングした。</p>
 
-		  <p class="footnote">
-			<time datetime="01-05-2018T19:28:35&#43;09:00">01-05-2018</time>
+<pre><code class="language-emacs-lisp">  (evil-leader/set-key
+    &quot;hun&quot; 'easy-hugo-newpost-today
+    &quot;hud&quot; 'easy-hugo-github-deploy
+    &quot;hul&quot; 'easy-hugo-list-posts
+    )
+</code></pre>
 
-			
-		  |	
-			
-
-			
-			tags: [ <a href="https://yuya373.github.io/blog/tags/scala">scala</a> <a href="https://yuya373.github.io/blog/tags/emacs">emacs</a> ]
-			
-
-			
-
-			
-
-		  </p>
-		</li>
-		
-		
-	  </ul>
-	</div>
-	</div>
+      </div>
+    </div>
+  </div>
   <div class="pure-u-1-24 pure-u-md-1-6"></div>
 </div>
 
@@ -459,7 +459,7 @@ body {
 
         </ul>
         <a href="#" class="pure-menu-link pull-right" id="gototop-btn">↑↑</a>
-        <a href="https://yuya373.github.io/blog/index.xml" class="pure-menu-link pull-right">RSS</a>
+        <a href="" class="pure-menu-link pull-right">RSS</a>
       </div>
       
     </div>
