@@ -403,7 +403,7 @@ body {
 タイトルを考えるのがめんどくさくて書くのをやめてしまうのでとりあえず今日の年月日をタイトルにする関数を書いた。
 あとhelmでpostsを見る関数も書いた。</p>
 
-<pre><code class="language-emacs-lisp">(use-package easy-hugo
+<pre><code class="language-lisp">(use-package easy-hugo
   :commands (easy-hugo easy-hugo-newpost)
   :init
   (setq easy-hugo-postdir &quot;content/posts&quot;)
@@ -424,7 +424,7 @@ body {
 
 <p><code>easy-hugo</code>を<code>eash-hugo</code>とタイポするので <kbd>Space</kbd> <kbd>h</kbd> <kbd>u</kbd> にマッピングした。</p>
 
-<pre><code class="language-emacs-lisp">  (evil-leader/set-key
+<pre><code class="language-lisp">  (evil-leader/set-key
     &quot;hun&quot; 'easy-hugo-newpost-today
     &quot;hud&quot; 'easy-hugo-github-deploy
     &quot;hul&quot; 'easy-hugo-list-posts
