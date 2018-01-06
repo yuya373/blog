@@ -17,8 +17,7 @@
       <pubDate>Fri, 05 Jan 2018 19:28:35 +0900</pubDate>
       
       <guid>https://yuya373.github.io/blog/posts/my-first-post/</guid>
-      <description>👍
-object chapter6 { case class Cat(name: String, favoriteFoods: List[String]) }  (setq hello &amp;quot;world&amp;quot;)  </description>
+      <description>👍 object chapter6 { case class Cat(name: String, favoriteFoods: List[String]) } (setq hello &amp;quot;world&amp;quot;)</description>
     </item>
     
   </channel>
