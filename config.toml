@@ -5,6 +5,8 @@ theme = "temple"
 enableEmoji = true
 hasCJKLanguage = true
 publishDir = "docs"
+canonifyURLs = true
+                    
 
 [params]
   # Enables syntax highlighting
