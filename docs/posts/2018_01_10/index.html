@@ -3,8 +3,8 @@
 <head>
   
   <meta charset="utf-8">
-  <title>Tags</title>
-  <meta name="description" content="Tags">
+  <title>Emacsを--with-imagemagickでビルドしたい</title>
+  <meta name="description" content="Emacsを--with-imagemagickでビルドしたい">
   <meta name="author" content="Yuya Minami">
   
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -336,8 +336,6 @@ body {
 
   
   
-  <link href="https://yuya373.github.io/blog/tags/index.xml" rel="alternate" type="application/rss+xml" title="blog Feed" />
-  
 
   <meta name="generator" content="Hugo 0.32.1" />
   
@@ -372,28 +370,61 @@ body {
     <div class="pure-u-1-24 pure-u-md-1-6"></div>
 </div>
 
+
 <div class="pure-g">
   <div class="pure-u-1-24 pure-u-md-1-6"></div>
   <div class="pure-u-11-12 pure-u-md-2-3">
-    <p class="posts-name">Tags:</p>
-    <div class="post-content">
-      <ul class="posts">
+    <div class="post">
+
+      <div class="post-title">
+        <p class="footnote">
+        <time class="">01-10-2018</time>
         
         
-        <li>
-          <a href="emacs">emacs</a>
-          <span>&#40;3&#41;</span>
-        </li>
+        |
         
-        <li>
-          <a href="scala">scala</a>
-          <span>&#40;1&#41;</span>
-        </li>
         
-      </ul>
+        tags: [ <a href="https://yuya373.github.io/blog/tags/emacs">emacs</a> ]
+        
+
+        
+
+        
+        </p>
+        <h1>Emacsを--with-imagemagickでビルドしたい</h1>
+      </div>
+
+      <div class="post-content">
+        <ul>
+<li>Emacsを<code>--with-imagemagick</code>でビルドしたい</li>
+<li>Imagemagickの最新版は7.x.x</li>
+<li>EmacsはImagemagick7ではimagemagickが有効にならない(<code>configure</code>でエラーがでない、ビルドもエラーがでない。でも<code>(image-type-available-p 'imagemagick)</code>は<code>nil</code>が返ってくる。)</li>
+<li>Imagemagick6だとok(いままで通り動く)</li>
+</ul>
+
+<pre><code class="language-shell">yaourt -S imagemagick6
+cd $emacs-dir
+git pull origin master
+./autogen.sh
+PKG_CONFIG_PATH=&quot;/usr/lib/imagemagick6/pkgconfig&quot; ./configure --with-imagemagick
+make &amp;&amp; make install
+</code></pre>
+
+<p><code>PKG_CONFIG_PATH=&quot;/usr/lib/imagemagick6/pkgconfig&quot;</code>がないとimagemagick6をインストールしていても<code>configure</code>でImagemagickが見つからないと表示される。</p>
+
+<p>cf
+- <a href="https://aur.archlinux.org/packages/emacs-git/">AUR (en) - emacs-git</a>
+  - haawda commented on 2018-01-05 20:54
+  - PKGBUILDはまだ修正されてないらしい
+- <a href="https://debbugs.gnu.org/cgi/bugreport.cgi?bug=24455">#24455 - 25.1.50; No error if &ndash;with-imagemagick not obeyed - GNU bug report logs</a>
+  - configureでエラーがでないのはバグ?</p>
+
+      </div>
     </div>
   </div>
   <div class="pure-u-1-24 pure-u-md-1-6"></div>
+</div>
+
 <div class="footer pure-g">
   <div class="pure-u-1-24 pure-u-md-1-6"></div>
   <div class="pure-u-11-12 pure-u-md-2-3">
@@ -416,7 +447,7 @@ body {
 
         </ul>
         <a href="#" class="pure-menu-link pull-right" id="gototop-btn">↑↑</a>
-        <a href="https://yuya373.github.io/blog/tags/index.xml" class="pure-menu-link pull-right">RSS</a>
+        <a href="" class="pure-menu-link pull-right">RSS</a>
       </div>
       
     </div>
