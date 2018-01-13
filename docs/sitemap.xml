@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://yuya373.github.io/blog/posts/2018_01_14/</loc>
+    <lastmod>2018-01-14T00:46:54+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://yuya373.github.io/blog/posts/2018_01_10/</loc>
     <lastmod>2018-01-10T13:51:04+09:00</lastmod>
   </url>
@@ -24,13 +29,19 @@
   
   <url>
     <loc>https://yuya373.github.io/blog/tags/emacs/</loc>
-    <lastmod>2018-01-10T13:51:04+09:00</lastmod>
+    <lastmod>2018-01-14T00:46:54+09:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://yuya373.github.io/blog/tags/pdf-tools/</loc>
+    <lastmod>2018-01-14T00:46:54+09:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://yuya373.github.io/blog/posts/</loc>
-    <lastmod>2018-01-10T13:51:04+09:00</lastmod>
+    <lastmod>2018-01-14T00:46:54+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -42,13 +53,13 @@
   
   <url>
     <loc>https://yuya373.github.io/blog/tags/</loc>
-    <lastmod>2018-01-10T13:51:04+09:00</lastmod>
+    <lastmod>2018-01-14T00:46:54+09:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://yuya373.github.io/blog/</loc>
-    <lastmod>2018-01-10T13:51:04+09:00</lastmod>
+    <lastmod>2018-01-14T00:46:54+09:00</lastmod>
     <priority>0</priority>
   </url>
   

@@ -6,7 +6,7 @@
     <description>Recent content in Tags on blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-jp</language>
-    <lastBuildDate>Wed, 10 Jan 2018 13:51:04 +0900</lastBuildDate>
+    <lastBuildDate>Sun, 14 Jan 2018 00:46:54 +0900</lastBuildDate>
     
 	<atom:link href="https://yuya373.github.io/blog/tags/index.xml" rel="self" type="application/rss+xml" />
     
@@ -14,9 +14,18 @@
     <item>
       <title>Emacs</title>
       <link>https://yuya373.github.io/blog/tags/emacs/</link>
-      <pubDate>Wed, 10 Jan 2018 13:51:04 +0900</pubDate>
+      <pubDate>Sun, 14 Jan 2018 00:46:54 +0900</pubDate>
       
       <guid>https://yuya373.github.io/blog/tags/emacs/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Pdf Tools</title>
+      <link>https://yuya373.github.io/blog/tags/pdf-tools/</link>
+      <pubDate>Sun, 14 Jan 2018 00:46:54 +0900</pubDate>
+      
+      <guid>https://yuya373.github.io/blog/tags/pdf-tools/</guid>
       <description></description>
     </item>
     
