@@ -17,7 +17,7 @@
       <pubDate>Sun, 14 Jan 2018 00:46:54 +0900</pubDate>
       
       <guid>https://yuya373.github.io/blog/posts/2018_01_14/</guid>
-      <description>pdf-toolsでpdf-links-action-performを実行したら↓のエラーがでた。 convert: unable to read font `helvetica&#39; @ error/annotate.c/RenderFreetype/1361. yaourt helveticaで出て</description>
+      <description>pdf-toolsでpdf-links-action-performを実行したら*pdf-util-convert-output*に↓のエラ</description>
     </item>
     
   </channel>
