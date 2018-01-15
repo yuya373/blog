@@ -419,8 +419,8 @@ docker build -t app --cache-from=app --cache-from=builder .
 
 <p>あと、<code>--build-arg</code>で変数を上書きしている場合はbuilderとappの両方に付けないとappをビルドした時にbuilderのキャッシュが効かない</p>
 
-<pre><code>docker build --build-arg APP_ENV=prod --target builder -t builder --cache-from=builder .
-docker build --build-arg APP_ENV=prod -t app --cache-from=app --cache-from=builder .
+<pre><code>docker build --build-arg app_env=prod --target builder -t builder --cache-from=builder .
+docker build --build-arg app_env=prod -t app --cache-from=app --cache-from=builder .
 </code></pre>
 
       </div>
