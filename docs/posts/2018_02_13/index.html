@@ -3,8 +3,8 @@
 <head>
   
   <meta charset="utf-8">
-  <title>Posts</title>
-  <meta name="description" content="Posts">
+  <title>Chrome extension作った</title>
+  <meta name="description" content="Chrome extension作った">
   <meta name="author" content="Yuya Minami">
   
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -338,8 +338,6 @@ body {
 
   
   
-  <link href="https://yuya373.github.io/blog/posts/index.xml" rel="alternate" type="application/rss+xml" title="blog Feed" />
-  
 
   <meta name="generator" content="Hugo 0.36" />
   
@@ -375,95 +373,53 @@ body {
 </div>
 
 
-
 <div class="pure-g">
   <div class="pure-u-1-24 pure-u-md-1-6"></div>
   <div class="pure-u-11-12 pure-u-md-2-3">
-    <div class="post-content">
-      <p class="posts-name">Posts:</p>
+    <div class="post">
 
-      <ul class="posts">
+      <div class="post-title">
+        <p class="footnote">
+        <time class="">02-13-2018</time>
         
         
         
-        <li>
-          
-          <a class="post-list" href="https://yuya373.github.io/blog/posts/2018_02_13/">Chrome extension作った</a>
 
-          <p class="footnote">
-          <time datetime="02-13-2018">
-            02-13-2018
-          </time>
-          </p>
-        </li>
         
-        
-        
-        <li>
-          
-          <a class="post-list" href="https://yuya373.github.io/blog/posts/2018_01_15/">docker multi stage buildで--cache-fromを使うとpre-stageのキャッシュが効かない</a>
 
-          <p class="footnote">
-          <time datetime="01-15-2018">
-            01-15-2018
-          </time>
-          </p>
-        </li>
         
-        
-        
-        <li>
-          
-          <a class="post-list" href="https://yuya373.github.io/blog/posts/2018_01_14/">2018_01_14</a>
+        </p>
+        <h1>Chrome extension作った</h1>
+      </div>
 
-          <p class="footnote">
-          <time datetime="01-14-2018">
-            01-14-2018
-          </time>
-          </p>
-        </li>
-        
-        
-        
-        <li>
-          
-          <a class="post-list" href="https://yuya373.github.io/blog/posts/2018_01_10/">Emacsを--with-imagemagickでビルドしたい</a>
+      <div class="post-content">
+        <p><a href="https://github.com/yuya373/memo">https://github.com/yuya373/memo</a></p>
 
-          <p class="footnote">
-          <time datetime="01-10-2018">
-            01-10-2018
-          </time>
-          </p>
-        </li>
-        
-        
-        
-        <li>
-          
-          <a class="post-list" href="https://yuya373.github.io/blog/posts/2018_01_05/">hugoをはじめる</a>
+<p>webページに付箋を貼るイメージ</p>
 
-          <p class="footnote">
-          <time datetime="01-05-2018">
-            01-05-2018
-          </time>
-          </p>
-        </li>
-        
-        
-        
-        <li>
-          
-          <a class="post-list" href="https://yuya373.github.io/blog/posts/my-first-post/">My First Post</a>
+<p>webpack, yarn, babel, react, material-uiあたりを使った。material-uiのおかげでcssを書いてないので便利。<br />
+webpack, babel, eslintあたりはいつも設定ファイルの書き方を忘れているのでいつもドキュメントを読みながら書いていくことになる。<br />
+今回書いた設定ファイルもすぐに忘れてしまうだろう。</p>
 
-          <p class="footnote">
-          <time datetime="01-05-2018">
-            01-05-2018
-          </time>
-          </p>
-        </li>
-        
-        
-      </ul>
+<p><code>chrome.rutime.onMessage.addListner</code>にははまりどころがあって、コールバックに渡ってくるレスポンスを返す用の関数がgcされてしまい、content-script側でレスポンスが<code>undefined</code>になってしまう。<br />
+これは<code>addListner</code>の中では基本的に同期処理しか想定していないので、非同期処理をする場合は<code>addListner</code>が返り値として<code>true</code>を返す必要がある。<br />
+<a href="https://developer.chrome.com/extensions/messaging#simple">Message Passing - Google Chrome</a></p>
+
+<p><code>chrome.storage.sync</code>を使っているのでchromeにログインしているアカウント間ではデータ共有できるはず。<br />
+<code>chrome.storage.sync</code>は<code>chrome.storage.local</code>よりレートリミットがきびしいけど、エラー処理とか書いてないのでそのうち書く。<br />
+<a href="https://developer.chrome.com/extensions/storage">chrome.storage - Google Chrome</a><br />
+<a href="https://developer.chrome.com/extensions/storage#property-sync">chrome.storage.sync - Google Chrome</a></p>
+
+<p>urlをキーにしてメモを保存しているがurlの正規化をせずにそのまま使っているので、<code>http://example.com</code>と<code>https://example.com</code>では違うurlと認識されるのでそこも改善しないといけない。<br />
+ホストとパスだけチェックすれば良いかな。</p>
+
+<ul>
+<li><code>http://github.com/yuya373/memo</code> === <code>https://github.com/yuya373/memo</code></li>
+<li><code>https://github.com/yuya373/memo#head1</code> === <code>https://github.com/yuya373/memo</code></li>
+<li><code>https://github.com/yuya373/memo?q=hoge</code> === <code>https://github.com/yuya373/memo</code></li>
+</ul>
+
+      </div>
     </div>
   </div>
   <div class="pure-u-1-24 pure-u-md-1-6"></div>
@@ -491,7 +447,7 @@ body {
 
         </ul>
         <a href="#" class="pure-menu-link pull-right" id="gototop-btn">↑↑</a>
-        <a href="https://yuya373.github.io/blog/posts/index.xml" class="pure-menu-link pull-right">RSS</a>
+        <a href="" class="pure-menu-link pull-right">RSS</a>
       </div>
       
     </div>
