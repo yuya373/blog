@@ -397,12 +397,13 @@ body {
 
 <p>webページに付箋を貼るイメージ</p>
 
-<p>webpack, yarn, babel, react, material-uiあたりを使った。material-uiのおかげでcssを書いてないので便利。<br />
+<p>webpack, yarn, babel, react, material-uiあたりを使った。<br />
+material-uiのおかげでcssを書いてないので便利。<br />
 webpack, babel, eslintあたりはいつも設定ファイルの書き方を忘れているのでいつもドキュメントを読みながら書いていくことになる。<br />
 今回書いた設定ファイルもすぐに忘れてしまうだろう。</p>
 
-<p><code>chrome.rutime.onMessage.addListner</code>にははまりどころがあって、コールバックに渡ってくるレスポンスを返す用の関数がgcされてしまい、content-script側でレスポンスが<code>undefined</code>になってしまう。<br />
-これは<code>addListner</code>の中では基本的に同期処理しか想定していないので、非同期処理をする場合は<code>addListner</code>が返り値として<code>true</code>を返す必要がある。<br />
+<p><code>chrome.rutime.onMessage.addListner</code>にははまりどころがあって、非同期処理を<code>addListner</code>の中で行うと、コールバックに渡ってくるレスポンスを返す用の関数がgcされてしまい、content-script側でレスポンスが<code>undefined</code>になってしまう。<br />
+これは<code>addListner</code>の中では基本的に同期処理しか想定していないので、非同期処理をする場合は<code>addListner</code>から<code>true</code>を返す必要がある。<br />
 <a href="https://developer.chrome.com/extensions/messaging#simple">Message Passing - Google Chrome</a></p>
 
 <p><code>chrome.storage.sync</code>を使っているのでchromeにログインしているアカウント間ではデータ共有できるはず。<br />
