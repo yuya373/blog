@@ -3,8 +3,8 @@
 <head>
   
   <meta charset="utf-8">
-  <title>blog</title>
-  <meta name="description" content="blog">
+  <title>実践Rust入門を読みはじめた</title>
+  <meta name="description" content="実践Rust入門を読みはじめた">
   <meta name="author" content="Yuya Minami">
   
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -356,8 +356,6 @@ code, kbd, pre, samp {
 
   
   
-  <link href="https://blog.yuya373.dev/index.xml" rel="alternate" type="application/rss+xml" title="blog Feed" />
-  
 
   <meta name="generator" content="Hugo 0.55.3" />
 
@@ -420,30 +418,20 @@ code {
 
 <div class="pure-g">
   <div class="pure-u-1-24 pure-u-md-5-24"></div>
-	<div class="pure-u-11-12 pure-u-md-7-12">
-	<div class="post-content">
-	
-	  <p class="posts-name">Recent posts:</p>
+  <div class="pure-u-11-12 pure-u-md-7-12">
+    <div class="post">
 
-	  <ul class="posts">
-		
-		
-		
-		<li>
-		  
-		  <a class="post-list" href="https://blog.yuya373.dev/posts/2019_04_30-23_59/">実践Rust入門を読みはじめた</a>
-
-      <p class="footnote">
-        <time datetime="2019-04-30 23:59:00 &#43;0900 JST">
-          
-            2019-04-30
-          
-        </time>
-
+      <div class="post-title">
+        <p class="footnote">
+          <time datetime="2019-04-30 23:59:00 &#43;0900 JST">
+            
+              2019-04-30
+            
+          </time>
+        
         
         |
         
-
         
         tags: [ <a href="https://blog.yuya373.dev/tags/rust">Rust</a> <a href="https://blog.yuya373.dev/tags/emacs">Emacs</a> ]
         
@@ -451,13 +439,92 @@ code {
         
 
         
+        </p>
+        <h1>実践Rust入門を読みはじめた</h1>
+      </div>
 
-      </p>
-    </li>
-    
-    
-    </ul>
-  </div>
+      <div class="post-content">
+        
+        <p><a href="https://gihyo.jp/book/2019/978-4-297-10559-4">実践Rust入門［言語仕様から開発手法まで］：書籍案内｜技術評論社</a> を読み始めた。<br />
+写経したコードは <a href="https://github.com/yuya373/practical-rust-introduction">yuya373/practical-rust-introduction</a> に置く。</p>
+
+<p>Emacsには</p>
+
+<ul>
+<li><a href="https://github.com/rust-lang/rust-mode">rust-lang/rust-mode: Emacs configuration for Rust</a></li>
+<li><a href="https://github.com/racer-rust/emacs-racer">racer-rust/emacs-racer: Racer support for Emacs</a></li>
+<li><a href="https://github.com/flycheck/flycheck-rust">flycheck/flycheck-rust: Better Rust/Cargo support for Flycheck</a></li>
+<li><a href="https://github.com/kwrooijen/cargo.el">kwrooijen/cargo.el: Emacs Minor Mode for Cargo, Rust&rsquo;s Package Manager.</a></li>
+<li><a href="https://github.com/dryman/toml-mode.el">dryman/toml-mode.el: Emacs Mojor mode for editing TOML files</a></li>
+</ul>
+
+<p>のパッケージを入れた。</p>
+
+<p>epub形式でダウンロードしたので <a href="https://github.com/wasamasa/nov.el">wasamasa/nov.el</a> を使ってEmacsで読んでいる。</p>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-emacs-lisp" data-lang="emacs-lisp">(<span style="color:#268bd2">el-get-bundle</span> <span style="color:#268bd2">rust-mode</span>)
+(<span style="color:#cb4b16">use-package</span> <span style="color:#268bd2">rust-mode</span>
+  <span style="color:#cb4b16">:mode</span> ((<span style="color:#2aa198">&#34;\\.rs\\&#39;&#34;</span> . <span style="color:#268bd2">rust-mode</span>))
+  <span style="color:#cb4b16">:init</span>
+  (<span style="color:#cb4b16">setq</span> <span style="color:#268bd2">rust-format-on-save</span> <span style="color:#268bd2">t</span>)
+  <span style="color:#cb4b16">:config</span>
+  (<span style="color:#268bd2">modify-syntax-entry</span> <span style="color:#2aa198">?!</span> <span style="color:#2aa198">&#34;_&#34;</span> <span style="color:#268bd2">rust-mode-syntax-table</span>)
+  (<span style="color:#268bd2">modify-syntax-entry</span> <span style="color:#2aa198">?_</span> <span style="color:#2aa198">&#34;w&#34;</span> <span style="color:#268bd2">rust-mode-syntax-table</span>))
+
+(<span style="color:#268bd2">el-get-bundle</span> <span style="color:#268bd2">dash</span>)
+(<span style="color:#268bd2">el-get-bundle</span> <span style="color:#268bd2">s</span>)
+(<span style="color:#268bd2">el-get-bundle</span> <span style="color:#268bd2">racer-rust/emacs-racer</span>
+  <span style="color:#cb4b16">:name</span> <span style="color:#268bd2">racer</span>)
+(<span style="color:#cb4b16">use-package</span> <span style="color:#268bd2">racer</span>
+  <span style="color:#cb4b16">:commands</span> (<span style="color:#268bd2">racer-mode</span>)
+  <span style="color:#cb4b16">:diminish</span> <span style="color:#268bd2">racer-mode</span>
+  <span style="color:#cb4b16">:init</span>
+  (<span style="color:#268bd2">add-hook</span> <span style="color:#2aa198">&#39;racer-mode-hook</span> <span style="color:#2aa198">&#39;eldoc-mode</span>)
+  (<span style="color:#268bd2">add-hook</span> <span style="color:#2aa198">&#39;rust-mode-hook</span> <span style="color:#2aa198">&#39;racer-mode</span>)
+  <span style="color:#cb4b16">:config</span>
+
+  (<span style="color:#268bd2">evil-define-key</span> <span style="color:#2aa198">&#39;normal</span> <span style="color:#268bd2">racer-mode-map</span>
+    <span style="color:#2aa198">&#34;,h&#34;</span> <span style="color:#2aa198">&#39;racer-describe</span>
+    <span style="color:#2aa198">&#34;,d&#34;</span> <span style="color:#2aa198">&#39;racer-find-definition</span>))
+
+(<span style="color:#268bd2">el-get-bundle</span> <span style="color:#268bd2">flycheck-rust</span>)
+(<span style="color:#cb4b16">use-package</span> <span style="color:#268bd2">flycheck-rust</span>
+  <span style="color:#cb4b16">:commands</span> (<span style="color:#268bd2">flycheck-rust-setup</span>)
+  <span style="color:#cb4b16">:init</span>
+  (<span style="color:#268bd2">add-hook</span> <span style="color:#2aa198">&#39;flycheck-mode-hook</span> <span style="color:#2aa198">&#39;flycheck-rust-setup</span>))
+
+(<span style="color:#268bd2">el-get-bundle</span> <span style="color:#268bd2">cargo</span>)
+(<span style="color:#cb4b16">use-package</span> <span style="color:#268bd2">cargo</span>
+  <span style="color:#cb4b16">:commands</span> (<span style="color:#268bd2">cargo-minor-mode</span>)
+  <span style="color:#cb4b16">:diminish</span> <span style="color:#268bd2">cargo-minor-mode</span>
+  <span style="color:#cb4b16">:init</span>
+  (<span style="color:#268bd2">add-hook</span> <span style="color:#2aa198">&#39;rust-mode-hook</span> <span style="color:#2aa198">&#39;cargo-minor-mode</span>)
+  <span style="color:#cb4b16">:config</span>
+  (<span style="color:#cb4b16">setq</span> <span style="color:#268bd2">cargo-process--command-test</span> <span style="color:#2aa198">&#34;test --color=never&#34;</span>)
+  (<span style="color:#268bd2">evil-define-key</span> <span style="color:#2aa198">&#39;normal</span> <span style="color:#268bd2">cargo-minor-mode-map</span>
+    <span style="color:#2aa198">&#34;,C&#34;</span> <span style="color:#2aa198">&#39;cargo-process-clean</span>
+    <span style="color:#2aa198">&#34;,c&#34;</span> <span style="color:#2aa198">&#39;cargo-process-clippy</span>
+    <span style="color:#2aa198">&#34;,d&#34;</span> <span style="color:#2aa198">&#39;cargo-process-doc</span>
+    <span style="color:#2aa198">&#34;,b&#34;</span> <span style="color:#2aa198">&#39;cargo-process-build</span>
+    <span style="color:#2aa198">&#34;,n&#34;</span> <span style="color:#2aa198">&#39;cargo-process-new</span>
+    <span style="color:#2aa198">&#34;,i&#34;</span> <span style="color:#2aa198">&#39;cargo-process-init</span>
+    <span style="color:#2aa198">&#34;,r&#34;</span> <span style="color:#2aa198">&#39;cargo-process-run</span>
+    <span style="color:#2aa198">&#34;,s&#34;</span> <span style="color:#2aa198">&#39;cargo-process-search</span>
+    <span style="color:#2aa198">&#34;,u&#34;</span> <span style="color:#2aa198">&#39;cargo-process-update</span>
+    <span style="color:#2aa198">&#34;,B&#34;</span> <span style="color:#2aa198">&#39;cargo-process-bench</span>
+    <span style="color:#2aa198">&#34;,t&#34;</span> <span style="color:#2aa198">&#39;cargo-process-test</span>))
+
+(<span style="color:#268bd2">el-get-bundle</span> <span style="color:#268bd2">toml-mode</span>)
+(<span style="color:#cb4b16">use-package</span> <span style="color:#268bd2">toml-mode</span>
+  <span style="color:#cb4b16">:mode</span> ((<span style="color:#2aa198">&#34;\\.toml\\&#39;&#34;</span> . <span style="color:#268bd2">toml-mode</span>)))
+
+(<span style="color:#268bd2">el-get-bundle</span> <span style="color:#268bd2">esxml</span>)
+(<span style="color:#268bd2">el-get-bundle</span> <span style="color:#268bd2">wasamasa/nov.el</span> <span style="color:#cb4b16">:name</span> <span style="color:#268bd2">nov</span>)
+(<span style="color:#cb4b16">use-package</span> <span style="color:#268bd2">nov</span>
+  <span style="color:#cb4b16">:mode</span> ((<span style="color:#2aa198">&#34;\\.epub\\&#39;&#34;</span> . <span style="color:#268bd2">nov-mode</span>))
+  <span style="color:#cb4b16">:init</span>
+  (<span style="color:#cb4b16">setq</span> <span style="color:#268bd2">nov-text-width</span> <span style="color:#2aa198;font-weight:bold">80</span>))</code></pre></div>
+      </div>
+    </div>
   </div>
   <div class="pure-u-1-24 pure-u-md-5-24"></div>
 </div>
@@ -486,8 +553,6 @@ code {
 
         </ul>
         <a href="#" class="pure-menu-link pull-right" id="gototop-btn">↑↑</a>
-        
-        <a href="https://blog.yuya373.dev/index.xml" class="pure-menu-link pull-right">RSS</a>
         
       </div>
       
