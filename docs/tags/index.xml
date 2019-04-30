@@ -2,50 +2,13 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on blog</title>
-    <link>https://yuya373.github.io/blog/tags/</link>
+    <link>https://blog.yuya373.dev/tags/</link>
     <description>Recent content in Tags on blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-jp</language>
-    <lastBuildDate>Mon, 15 Jan 2018 17:18:01 +0900</lastBuildDate>
     
-	<atom:link href="https://yuya373.github.io/blog/tags/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://blog.yuya373.dev/tags/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>Docker</title>
-      <link>https://yuya373.github.io/blog/tags/docker/</link>
-      <pubDate>Mon, 15 Jan 2018 17:18:01 +0900</pubDate>
-      
-      <guid>https://yuya373.github.io/blog/tags/docker/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Emacs</title>
-      <link>https://yuya373.github.io/blog/tags/emacs/</link>
-      <pubDate>Sun, 14 Jan 2018 00:46:54 +0900</pubDate>
-      
-      <guid>https://yuya373.github.io/blog/tags/emacs/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Pdf Tools</title>
-      <link>https://yuya373.github.io/blog/tags/pdf-tools/</link>
-      <pubDate>Sun, 14 Jan 2018 00:46:54 +0900</pubDate>
-      
-      <guid>https://yuya373.github.io/blog/tags/pdf-tools/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Scala</title>
-      <link>https://yuya373.github.io/blog/tags/scala/</link>
-      <pubDate>Fri, 05 Jan 2018 19:28:35 +0900</pubDate>
-      
-      <guid>https://yuya373.github.io/blog/tags/scala/</guid>
-      <description></description>
-    </item>
     
   </channel>
 </rss>

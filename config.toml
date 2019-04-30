@@ -1,4 +1,5 @@
-baseURL = "https://yuya373.github.io/blog/"
+baseURL = "https://blog.yuya373.dev/"
+defaultContentLanguage = "ja"
 languageCode = "ja-jp"
 title = "blog"
 theme = "temple"
@@ -6,13 +7,24 @@ enableEmoji = true
 hasCJKLanguage = true
 publishDir = "docs"
 canonifyURLs = true
+# Enables Chroma-based syntax highlighting with theme "friendly"
+# See https://xyproto.github.io/splash/docs/ for other theme options
+pygmentsStyle = "solarized-light"
+# If true, Chroma will highlight GitHub-style code fences in addition to
+# highlight shortcodes
+pygmentsCodeFences = true
 
 [params]
-  # Enables syntax highlighting
-  highlight = true
-  # Supports highlighting for languages not included in the original pack
-  # See https://highlightjs.org/download/
-  hjslangs = ["scala", "lisp"]
+  # Enables the topmenu, which pulls from categories
+  topmenu = "categories"
+  # Enables custom date format (optional, the default is MM-DD-YYYY)
+  # For reference to date and time templating, see:
+  # https://gohugo.io/functions/format/#hugo-date-and-time-templating-reference
+  dateformatpretty = "2006-01-02"
+
+  # Enable table of contents, this can be overridden by page level parameter `toc`.
+  toc = true
+
 
 # Builds a list page for each category given
 [taxonomies]

@@ -2,68 +2,13 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>blog</title>
-    <link>https://yuya373.github.io/blog/</link>
+    <link>https://blog.yuya373.dev/</link>
     <description>Recent content on blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-jp</language>
-    <lastBuildDate>Tue, 13 Feb 2018 00:17:53 +0900</lastBuildDate>
     
-	<atom:link href="https://yuya373.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://blog.yuya373.dev/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>Chrome extension作った</title>
-      <link>https://yuya373.github.io/blog/posts/2018_02_13/</link>
-      <pubDate>Tue, 13 Feb 2018 00:17:53 +0900</pubDate>
-      
-      <guid>https://yuya373.github.io/blog/posts/2018_02_13/</guid>
-      <description>https://github.com/yuya373/memo webページに付箋を貼るイメージ webpack, yarn, babel, react, material-uiあたりを使った。 material-uiのおかげでcssを書いてないので便利。</description>
-    </item>
-    
-    <item>
-      <title>docker multi stage buildで--cache-fromを使うとpre-stageのキャッシュが効かない</title>
-      <link>https://yuya373.github.io/blog/posts/2018_01_15/</link>
-      <pubDate>Mon, 15 Jan 2018 17:18:01 +0900</pubDate>
-      
-      <guid>https://yuya373.github.io/blog/posts/2018_01_15/</guid>
-      <description>Before docker build --target builder -t builder --cache-from=builder . docker build -t app --cache-from=app . pre-stage(builder)のキャッシュがappをビルドした時には効かない After docker build --target builder -t builder --cache-from=builder . docker build -t app --cache-from=app</description>
-    </item>
-    
-    <item>
-      <title>2018_01_14</title>
-      <link>https://yuya373.github.io/blog/posts/2018_01_14/</link>
-      <pubDate>Sun, 14 Jan 2018 00:46:54 +0900</pubDate>
-      
-      <guid>https://yuya373.github.io/blog/posts/2018_01_14/</guid>
-      <description>pdf-toolsでpdf-links-action-performを実行したら*pdf-util-convert-output*に↓のエラ</description>
-    </item>
-    
-    <item>
-      <title>Emacsを--with-imagemagickでビルドしたい</title>
-      <link>https://yuya373.github.io/blog/posts/2018_01_10/</link>
-      <pubDate>Wed, 10 Jan 2018 13:51:04 +0900</pubDate>
-      
-      <guid>https://yuya373.github.io/blog/posts/2018_01_10/</guid>
-      <description>Emacsを--with-imagemagickでビルドしたい Imagemagickの最新版は7.x.x EmacsはImagemagick7</description>
-    </item>
-    
-    <item>
-      <title>hugoをはじめる</title>
-      <link>https://yuya373.github.io/blog/posts/2018_01_05/</link>
-      <pubDate>Fri, 05 Jan 2018 20:58:13 +0900</pubDate>
-      
-      <guid>https://yuya373.github.io/blog/posts/2018_01_05/</guid>
-      <description>steps to phantasien のブログを見ていけてるなと思いhugoにたどりついた。 結局、テーマは aos/temple: A fast, minimal, responsive theme for Hugo にした。 Emacsに easy-hugo をインストールした。 設定をし</description>
-    </item>
-    
-    <item>
-      <title>My First Post</title>
-      <link>https://yuya373.github.io/blog/posts/my-first-post/</link>
-      <pubDate>Fri, 05 Jan 2018 19:28:35 +0900</pubDate>
-      
-      <guid>https://yuya373.github.io/blog/posts/my-first-post/</guid>
-      <description>👍 object chapter6 { case class Cat(name: String, favoriteFoods: List[String]) } (setq hello &amp;quot;world&amp;quot;)</description>
-    </item>
     
   </channel>
 </rss>
