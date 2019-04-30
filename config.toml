@@ -14,6 +14,9 @@ pygmentsStyle = "solarized-light"
 # highlight shortcodes
 pygmentsCodeFences = true
 
+[blackfriday]
+hrefTargetBlank = true
+
 [params]
   # Enables the topmenu, which pulls from categories
   topmenu = "categories"

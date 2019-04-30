@@ -20,5 +20,14 @@
       <description>実践Rust入門［言語仕様から開発手法まで］：書籍案内｜技術評論社 を読み始めた。 写経したコードは yuya373/practical-rust-introduction に置く。 Emacsには rust-lang/rust-mode: Emacs configuration for Rust racer-rust/emacs-racer: Racer support for Emacs</description>
     </item>
     
+    <item>
+      <title>About</title>
+      <link>https://blog.yuya373.dev/about/</link>
+      <pubDate>Fri, 05 Jan 2018 19:55:20 +0900</pubDate>
+      
+      <guid>https://blog.yuya373.dev/about/</guid>
+      <description>職務経歴書 yuya373/Curriculum-Vitae GitHub https://github.com/yuya373 Twitter https://twitter.com/mooonyman</description>
+    </item>
+    
   </channel>
 </rss>
