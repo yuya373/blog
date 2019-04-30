@@ -1,50 +1,23 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>emacs on blog</title>
+    <title>Emacs on blog</title>
     <link>https://blog.yuya373.dev/tags/emacs/</link>
-    <description>Recent content in emacs on blog</description>
+    <description>Recent content in Emacs on blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-jp</language>
-    <lastBuildDate>Sun, 14 Jan 2018 00:46:54 +0900</lastBuildDate>
+    <lastBuildDate>Tue, 30 Apr 2019 20:34:18 +0900</lastBuildDate>
     
 	<atom:link href="https://blog.yuya373.dev/tags/emacs/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>2018_01_14</title>
-      <link>https://blog.yuya373.dev/posts/2018_01_14/</link>
-      <pubDate>Sun, 14 Jan 2018 00:46:54 +0900</pubDate>
+      <title>実践Rust入門を読みはじめた</title>
+      <link>https://blog.yuya373.dev/posts/2019_04_30/</link>
+      <pubDate>Tue, 30 Apr 2019 20:34:18 +0900</pubDate>
       
-      <guid>https://blog.yuya373.dev/posts/2018_01_14/</guid>
-      <description>pdf-toolsでpdf-links-action-performを実行したら*pdf-util-convert-output*に↓のエラ</description>
-    </item>
-    
-    <item>
-      <title>Emacsを--with-imagemagickでビルドしたい</title>
-      <link>https://blog.yuya373.dev/posts/2018_01_10/</link>
-      <pubDate>Wed, 10 Jan 2018 13:51:04 +0900</pubDate>
-      
-      <guid>https://blog.yuya373.dev/posts/2018_01_10/</guid>
-      <description>Emacsを--with-imagemagickでビルドしたい Imagemagickの最新版は7.x.x EmacsはImagemagick7</description>
-    </item>
-    
-    <item>
-      <title>hugoをはじめる</title>
-      <link>https://blog.yuya373.dev/posts/2018_01_05/</link>
-      <pubDate>Fri, 05 Jan 2018 20:58:13 +0900</pubDate>
-      
-      <guid>https://blog.yuya373.dev/posts/2018_01_05/</guid>
-      <description>steps to phantasien のブログを見ていけてるなと思いhugoにたどりついた。 結局、テーマは aos/temple: A fast, minimal, responsive theme for Hugo にした。 Emacsに easy-hugo をインストールした。 設定をし</description>
-    </item>
-    
-    <item>
-      <title>My First Post</title>
-      <link>https://blog.yuya373.dev/posts/my-first-post/</link>
-      <pubDate>Fri, 05 Jan 2018 19:28:35 +0900</pubDate>
-      
-      <guid>https://blog.yuya373.dev/posts/my-first-post/</guid>
-      <description>👍 object chapter6 { case class Cat(name: String, favoriteFoods: List[String]) }(setq hello &amp;#34;world&amp;#34;)</description>
+      <guid>https://blog.yuya373.dev/posts/2019_04_30/</guid>
+      <description>実践Rust入門［言語仕様から開発手法まで］：書籍案内｜技術評論社 を読み始めた。 写経したコードは yuya373/practical-rust-introduction に置く。 Emacsには rust-lang/rust-mode: Emacs configuration for Rust racer-rust/emacs-racer: Racer support for Emacs</description>
     </item>
     
   </channel>
