@@ -3,8 +3,8 @@
 <head>
   
   <meta charset="utf-8">
-  <title>Rust</title>
-  <meta name="description" content="Rust">
+  <title>実践Rust入門のメモ</title>
+  <meta name="description" content="実践Rust入門のメモ">
   <meta name="author" content="Yuya Minami">
   
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -356,8 +356,6 @@ code, kbd, pre, samp {
 
   
   
-  <link href="https://blog.yuya373.dev/tags/rust/index.xml" rel="alternate" type="application/rss+xml" title="blog Feed" />
-  
 
   <meta name="generator" content="Hugo 0.54.0" />
 
@@ -418,47 +416,131 @@ code {
 </div>
 
 
-
 <div class="pure-g">
   <div class="pure-u-1-24 pure-u-md-5-24"></div>
   <div class="pure-u-11-12 pure-u-md-7-12">
-    <div class="post-content">
-      <p class="posts-name">Rust:</p>
+    <div class="post">
 
-      <ul class="posts">
+      <div class="post-title">
+        <p class="footnote">
+          <time datetime="2019-05-02 17:00:00 &#43;0900 JST">
+            
+              2019-05-02
+            
+          </time>
         
         
+        |
         
-        <li>
-          
-          <a class="post-list" href="https://blog.yuya373.dev/posts/jissen_rust_nyumon_memo/">実践Rust入門のメモ</a>
+        
+        tags: [ <a href="https://blog.yuya373.dev/tags/rust">Rust</a> <a href="https://blog.yuya373.dev/tags/reading-notes">reading notes</a> ]
+        
 
-          <p class="footnote">
-            <time datetime="2019-05-02 17:00:00 &#43;0900 JST">
-              
-                2019-05-02
-              
-            </time>
-          </p>
-        </li>
         
-        
-        
-        <li>
-          
-          <a class="post-list" href="https://blog.yuya373.dev/posts/2019_04_30-23_59/">実践Rust入門を読みはじめた</a>
 
-          <p class="footnote">
-            <time datetime="2019-04-30 23:59:00 &#43;0900 JST">
-              
-                2019-04-30
-              
-            </time>
-          </p>
-        </li>
         
+        </p>
+        <h1>実践Rust入門のメモ</h1>
+      </div>
+
+      <div class="post-content">
+        <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#3-5-4-クロージャの型について">3-5-4　クロージャの型について</a>
+<ul>
+<li><a href="#rustのクロージャの型は全て違う">Rustのクロージャの型は全て違う</a></li>
+</ul></li>
+<li><a href="#3-6-4-syncトレイトとsendトレイト">3-6-4　SyncトレイトとSendトレイト</a>
+<ul>
+<li><a href="#rayon-join-の型"><code>rayon::join</code>の型</a></li>
+<li><a href="#fnonce">FnOnce</a></li>
+<li><a href="#send-sync">Send, Sync</a>
+<ul>
+<li><a href="#https-doc-rust-lang-org-book-ch16-04-extensible-concurrency-sync-and-send-html"><a href="https://doc.rust-lang.org/book/ch16-04-extensible-concurrency-sync-and-send.html" target="_blank">https://doc.rust-lang.org/book/ch16-04-extensible-concurrency-sync-and-send.html</a></a></li>
+<li><a href="#https-doc-rust-lang-org-nomicon-send-and-sync-html"><a href="https://doc.rust-lang.org/nomicon/send-and-sync.html" target="_blank">https://doc.rust-lang.org/nomicon/send-and-sync.html</a></a></li>
+<li><a href="#https-doc-rust-lang-org-std-marker-trait-send-html"><a href="https://doc.rust-lang.org/std/marker/trait.Send.html" target="_blank">https://doc.rust-lang.org/std/marker/trait.Send.html</a></a></li>
+<li><a href="#https-doc-rust-lang-org-std-marker-trait-sync-html"><a href="https://doc.rust-lang.org/std/marker/trait.Sync.html" target="_blank">https://doc.rust-lang.org/std/marker/trait.Sync.html</a></a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
         
-      </ul>
+
+<h2 id="3-5-4-クロージャの型について">3-5-4　クロージャの型について</h2>
+
+<h3 id="rustのクロージャの型は全て違う">Rustのクロージャの型は全て違う</h3>
+
+<blockquote>
+<p>なぜならクロージャの型は個々のクロージャで異なり、2つとして同じ型がないからです。これはクロージャが自分専用の環境を持つことができるからです。</p>
+</blockquote>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#859900">fn</span> <span style="color:#268bd2">bad</span>&lt;<span style="color:#268bd2">F</span>&gt;(<span style="color:#268bd2">f1</span>: <span style="color:#859900">&amp;</span><span style="color:#cb4b16">F</span>, <span style="color:#268bd2">f2</span>: <span style="color:#859900">&amp;</span><span style="color:#cb4b16">F</span>) {}
+
+<span style="color:#859900">fn</span> <span style="color:#268bd2">main</span>() {
+    <span style="color:#268bd2">bad</span>(&amp;|| {}, &amp;|| {})
+}
+</code></pre></div>
+<pre><code>mismatched types (expected closure, found a different closure) [E0308]
+...snip...
+no two closures, even if identical, have the same type [E0308]
+consider boxing your closure and/or using it as a trait object [E0308]
+</code></pre>
+
+<blockquote>
+<p>正しく定義するにはそれぞれのクロージャに別々の型パラメータを与えます。</p>
+</blockquote>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#859900">fn</span> <span style="color:#268bd2">good</span>&lt;<span style="color:#268bd2">F1</span>, <span style="color:#268bd2">F2</span>&gt;(<span style="color:#268bd2">f1</span>: <span style="color:#859900">&amp;</span><span style="color:#cb4b16">F1</span>, <span style="color:#268bd2">f2</span>: <span style="color:#859900">&amp;</span><span style="color:#cb4b16">F1</span>) {}
+
+<span style="color:#859900">fn</span> <span style="color:#268bd2">main</span>() {
+    <span style="color:#268bd2">good</span>(&amp;|| {}, &amp;|| {})
+}
+</code></pre></div>
+<h2 id="3-6-4-syncトレイトとsendトレイト">3-6-4　SyncトレイトとSendトレイト</h2>
+
+<h3 id="rayon-join-の型"><code>rayon::join</code>の型</h3>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#859900">pub</span> <span style="color:#859900">fn</span> <span style="color:#268bd2">join</span>&lt;<span style="color:#268bd2">A</span>, <span style="color:#268bd2">B</span>, <span style="color:#268bd2">RA</span>, <span style="color:#268bd2">RB</span>&gt;(<span style="color:#268bd2">oper_a</span>: <span style="color:#cb4b16">A</span>, <span style="color:#268bd2">oper_b</span>: <span style="color:#cb4b16">B</span>) -&gt; (<span style="color:#268bd2">RA</span>, <span style="color:#268bd2">RB</span>) <span style="color:#859900">where</span> <span style="color:#268bd2">A</span>: <span style="color:#cb4b16">FnOnce</span>() -&gt; <span style="color:#cb4b16">RA</span> + <span style="color:#cb4b16">Send</span>, <span style="color:#268bd2">B</span>: <span style="color:#cb4b16">FnOnce</span>() -&gt; <span style="color:#cb4b16">RB</span> + <span style="color:#cb4b16">Send</span>, <span style="color:#268bd2">RA</span>: <span style="color:#cb4b16">Send</span>, <span style="color:#268bd2">RB</span>: <span style="color:#cb4b16">Send</span>
+</code></pre></div>
+<h3 id="fnonce">FnOnce</h3>
+
+<p><a href="https://doc.rust-lang.org/std/ops/trait.FnOnce.html" target="_blank">https://doc.rust-lang.org/std/ops/trait.FnOnce.html</a></p>
+
+<blockquote>
+<p>Instances of FnOnce can be called, but might not be callable multiple times. Because of this, if the only thing known about a type is that it implements FnOnce, it can only be called once.</p>
+
+<p>Use FnOnce as a bound when you want to accept a parameter of function-like type and only need to call it once. If you need to call the parameter repeatedly, use FnMut as a bound; if you also need it to not mutate state, use Fn.</p>
+</blockquote>
+
+<h3 id="send-sync">Send, Sync</h3>
+
+<h4 id="https-doc-rust-lang-org-book-ch16-04-extensible-concurrency-sync-and-send-html"><a href="https://doc.rust-lang.org/book/ch16-04-extensible-concurrency-sync-and-send.html" target="_blank">https://doc.rust-lang.org/book/ch16-04-extensible-concurrency-sync-and-send.html</a></h4>
+
+<blockquote>
+<p>The Sync marker trait indicates that it is safe for the type implementing Sync to be referenced from multiple threads. In other words, any type T is Sync if &amp;T (a reference to T) is Send, meaning the reference can be sent safely to another thread</p>
+</blockquote>
+
+<h4 id="https-doc-rust-lang-org-nomicon-send-and-sync-html"><a href="https://doc.rust-lang.org/nomicon/send-and-sync.html" target="_blank">https://doc.rust-lang.org/nomicon/send-and-sync.html</a></h4>
+
+<h4 id="https-doc-rust-lang-org-std-marker-trait-send-html"><a href="https://doc.rust-lang.org/std/marker/trait.Send.html" target="_blank">https://doc.rust-lang.org/std/marker/trait.Send.html</a></h4>
+
+<blockquote>
+<p>Types that can be transferred across thread boundaries.</p>
+
+<p>This trait is automatically implemented when the compiler determines it&rsquo;s appropriate.</p>
+</blockquote>
+
+<h4 id="https-doc-rust-lang-org-std-marker-trait-sync-html"><a href="https://doc.rust-lang.org/std/marker/trait.Sync.html" target="_blank">https://doc.rust-lang.org/std/marker/trait.Sync.html</a></h4>
+
+<blockquote>
+<p>Types for which it is safe to share references between threads.</p>
+
+<p>This trait is automatically implemented when the compiler determines it&rsquo;s appropriate.</p>
+
+<p>The precise definition is: a type T is Sync if and only if &amp;T is Send. In other words, if there is no possibility of undefined behavior (including data races) when passing &amp;T references between threads.</p>
+</blockquote>
+
+      </div>
     </div>
   </div>
   <div class="pure-u-1-24 pure-u-md-5-24"></div>
@@ -488,8 +570,6 @@ code {
 
         </ul>
         <a href="#" class="pure-menu-link pull-right" id="gototop-btn">↑↑</a>
-        
-        <a href="https://blog.yuya373.dev/tags/rust/index.xml" class="pure-menu-link pull-right">RSS</a>
         
       </div>
       

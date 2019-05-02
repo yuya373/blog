@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Reading Notes on blog</title>
+    <link>https://blog.yuya373.dev/tags/reading-notes/</link>
+    <description>Recent content in Reading Notes on blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja-jp</language>
+    <lastBuildDate>Thu, 02 May 2019 17:00:00 +0900</lastBuildDate>
+    
+	<atom:link href="https://blog.yuya373.dev/tags/reading-notes/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>実践Rust入門のメモ</title>
+      <link>https://blog.yuya373.dev/posts/jissen_rust_nyumon_memo/</link>
+      <pubDate>Thu, 02 May 2019 17:00:00 +0900</pubDate>
+      
+      <guid>https://blog.yuya373.dev/posts/jissen_rust_nyumon_memo/</guid>
+      <description>3-5-4 クロージャの型について Rustのクロージャの型は全て違う なぜならクロージャの型は個々のクロージャで異なり、2つとして同じ型がないからです。</description>
+    </item>
+    
+  </channel>
+</rss>

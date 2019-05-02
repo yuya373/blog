@@ -21,9 +21,18 @@
     </item>
     
     <item>
+      <title>Reading Notes</title>
+      <link>https://blog.yuya373.dev/tags/reading-notes/</link>
+      <pubDate>Thu, 02 May 2019 17:00:00 +0900</pubDate>
+      
+      <guid>https://blog.yuya373.dev/tags/reading-notes/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Rust</title>
       <link>https://blog.yuya373.dev/tags/rust/</link>
-      <pubDate>Tue, 30 Apr 2019 23:59:00 +0900</pubDate>
+      <pubDate>Thu, 02 May 2019 17:00:00 +0900</pubDate>
       
       <guid>https://blog.yuya373.dev/tags/rust/</guid>
       <description></description>

@@ -3,33 +3,8 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://blog.yuya373.dev/tags/emacs/</loc>
-    <lastmod>2019-04-30T23:59:00+09:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.yuya373.dev/posts/</loc>
-    <lastmod>2019-04-30T23:59:00+09:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.yuya373.dev/tags/rust/</loc>
-    <lastmod>2019-04-30T23:59:00+09:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.yuya373.dev/tags/</loc>
-    <lastmod>2019-04-30T23:59:00+09:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.yuya373.dev/</loc>
-    <lastmod>2019-04-30T23:59:00+09:00</lastmod>
-    <priority>0</priority>
+    <loc>https://blog.yuya373.dev/posts/jissen_rust_nyumon_memo/</loc>
+    <lastmod>2019-05-02T17:00:00+09:00</lastmod>
   </url>
   
   <url>
@@ -44,6 +19,42 @@
   
   <url>
     <loc>https://blog.yuya373.dev/categories/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.yuya373.dev/tags/emacs/</loc>
+    <lastmod>2019-04-30T23:59:00+09:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.yuya373.dev/posts/</loc>
+    <lastmod>2019-05-02T17:00:00+09:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.yuya373.dev/tags/reading-notes/</loc>
+    <lastmod>2019-05-02T17:00:00+09:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.yuya373.dev/tags/rust/</loc>
+    <lastmod>2019-05-02T17:00:00+09:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.yuya373.dev/tags/</loc>
+    <lastmod>2019-04-30T23:59:00+09:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.yuya373.dev/</loc>
+    <lastmod>2019-05-02T17:00:00+09:00</lastmod>
     <priority>0</priority>
   </url>
   

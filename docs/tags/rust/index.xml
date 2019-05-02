@@ -6,10 +6,19 @@
     <description>Recent content in Rust on blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-jp</language>
-    <lastBuildDate>Tue, 30 Apr 2019 23:59:00 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 02 May 2019 17:00:00 +0900</lastBuildDate>
     
 	<atom:link href="https://blog.yuya373.dev/tags/rust/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>実践Rust入門のメモ</title>
+      <link>https://blog.yuya373.dev/posts/jissen_rust_nyumon_memo/</link>
+      <pubDate>Thu, 02 May 2019 17:00:00 +0900</pubDate>
+      
+      <guid>https://blog.yuya373.dev/posts/jissen_rust_nyumon_memo/</guid>
+      <description>3-5-4 クロージャの型について Rustのクロージャの型は全て違う なぜならクロージャの型は個々のクロージャで異なり、2つとして同じ型がないからです。</description>
+    </item>
     
     <item>
       <title>実践Rust入門を読みはじめた</title>
