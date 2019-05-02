@@ -26,7 +26,7 @@
       <pubDate>Tue, 30 Apr 2019 23:59:00 +0900</pubDate>
       
       <guid>https://blog.yuya373.dev/posts/2019_04_30-23_59/</guid>
-      <description>実践Rust入門［言語仕様から開発手法まで］：書籍案内｜技術評論社 を読み始めた。 写経したコードは yuya373/practical-rust-introduction に置く。 Emacsには rust-lang/rust-mode: Emacs configuration for Rust racer-rust/emacs-racer: Racer support for Emacs</description>
+      <description>実践Rust入門［言語仕様から開発手法まで］：書籍案内｜技術評論社 を読み始めた。 写経したコードは yuya373/practical-rust-introduction に置く。 読書メモ Emacsには rust-lang/rust-mode: Emacs configuration for Rust racer-rust/emacs-racer:</description>
     </item>
     
     <item>
