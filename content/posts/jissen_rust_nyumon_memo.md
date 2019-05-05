@@ -216,6 +216,7 @@ error[E0072]: recursive type `main::List` has infinite size
 
 ### `Box`のサイズは一定
 - [Why is Box able to have a defined size when simply defined recursive type don't have a defined size? : rust](https://www.reddit.com/r/rust/comments/72f3az/why_is_box_able_to_have_a_defined_size_when/)
+
 ``` rust
     println!("Size: {}", std::mem::size_of::<()>());
     println!("Size: {}", std::mem::size_of::<Box<()>>());

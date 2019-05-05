@@ -697,19 +697,17 @@ u32では64bit環境の場合足りない場合があり、u64なら32bit環境�
 <h3 id="box-のサイズは一定"><code>Box</code>のサイズは一定</h3>
 
 <ul>
-<li><a href="https://www.reddit.com/r/rust/comments/72f3az/why_is_box_able_to_have_a_defined_size_when/" target="_blank">Why is Box able to have a defined size when simply defined recursive type don&rsquo;t have a defined size? : rust</a>
-<code>rust
-println!(&quot;Size: {}&quot;, std::mem::size_of::&lt;()&gt;());
-println!(&quot;Size: {}&quot;, std::mem::size_of::&lt;Box&lt;()&gt;&gt;());
-println!(&quot;Size: {}&quot;, std::mem::size_of::&lt;char&gt;());
-println!(&quot;Size: {}&quot;, std::mem::size_of::&lt;Box&lt;char&gt;&gt;());
-println!(&quot;Size: {}&quot;, std::mem::size_of::&lt;u32&gt;());
-println!(&quot;Size: {}&quot;, std::mem::size_of::&lt;Box&lt;u32&gt;&gt;());
-println!(&quot;Size: {}&quot;, std::mem::size_of::&lt;Vec&lt;String&gt;&gt;());
-println!(&quot;Size: {}&quot;, std::mem::size_of::&lt;Box&lt;Vec&lt;String&gt;&gt;&gt;());
-</code></li>
+<li><a href="https://www.reddit.com/r/rust/comments/72f3az/why_is_box_able_to_have_a_defined_size_when/" target="_blank">Why is Box able to have a defined size when simply defined recursive type don&rsquo;t have a defined size? : rust</a></li>
 </ul>
-
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">    <span style="color:#268bd2">println</span>!(<span style="color:#2aa198">&#34;Size: {}&#34;</span>, <span style="color:#268bd2">std</span>::<span style="color:#268bd2">mem</span>::<span style="color:#268bd2">size_of</span>::&lt;()&gt;());
+    <span style="color:#268bd2">println</span>!(<span style="color:#2aa198">&#34;Size: {}&#34;</span>, <span style="color:#268bd2">std</span>::<span style="color:#268bd2">mem</span>::<span style="color:#268bd2">size_of</span>::&lt;<span style="color:#cb4b16">Box</span>&lt;()&gt;&gt;());
+    <span style="color:#268bd2">println</span>!(<span style="color:#2aa198">&#34;Size: {}&#34;</span>, <span style="color:#268bd2">std</span>::<span style="color:#268bd2">mem</span>::<span style="color:#268bd2">size_of</span>::&lt;<span style="color:#268bd2">char</span>&gt;());
+    <span style="color:#268bd2">println</span>!(<span style="color:#2aa198">&#34;Size: {}&#34;</span>, <span style="color:#268bd2">std</span>::<span style="color:#268bd2">mem</span>::<span style="color:#268bd2">size_of</span>::&lt;<span style="color:#cb4b16">Box</span>&lt;<span style="color:#268bd2">char</span>&gt;&gt;());
+    <span style="color:#268bd2">println</span>!(<span style="color:#2aa198">&#34;Size: {}&#34;</span>, <span style="color:#268bd2">std</span>::<span style="color:#268bd2">mem</span>::<span style="color:#268bd2">size_of</span>::&lt;<span style="color:#859900;font-weight:bold">u32</span>&gt;());
+    <span style="color:#268bd2">println</span>!(<span style="color:#2aa198">&#34;Size: {}&#34;</span>, <span style="color:#268bd2">std</span>::<span style="color:#268bd2">mem</span>::<span style="color:#268bd2">size_of</span>::&lt;<span style="color:#cb4b16">Box</span>&lt;<span style="color:#859900;font-weight:bold">u32</span>&gt;&gt;());
+    <span style="color:#268bd2">println</span>!(<span style="color:#2aa198">&#34;Size: {}&#34;</span>, <span style="color:#268bd2">std</span>::<span style="color:#268bd2">mem</span>::<span style="color:#268bd2">size_of</span>::&lt;<span style="color:#cb4b16">Vec</span>&lt;<span style="color:#cb4b16">String</span>&gt;&gt;());
+    <span style="color:#268bd2">println</span>!(<span style="color:#2aa198">&#34;Size: {}&#34;</span>, <span style="color:#268bd2">std</span>::<span style="color:#268bd2">mem</span>::<span style="color:#268bd2">size_of</span>::&lt;<span style="color:#cb4b16">Box</span>&lt;<span style="color:#cb4b16">Vec</span>&lt;<span style="color:#cb4b16">String</span>&gt;&gt;&gt;());
+</code></pre></div>
 <pre><code>Size: 0
 Size: 8
 Size: 4
