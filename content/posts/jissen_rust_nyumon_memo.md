@@ -167,3 +167,74 @@ error[E0308]: mismatched types
                found type `[closure@src/main.rs:135:9: 135:18 x:_]`
 ```
 
+## 4-3-3　スライス
+
+> スライス型（slice type）は配列要素の範囲に効率よくアクセスするためのビューです。配列といってもスライスが対象とするデータ構造は配列だけではありません。連続したメモリ領域に同じ型の要素が並んでいるデータ構造なら、どれでも対象にできます。このようなデータ型にはベクタや、Rust以外の言語で作成した配列なども含まれます。
+
+### ボックス化されたスライス
+
+> &[T]や&mut[T]といった一般的なスライスはポインタの一種で、それ自身はデータの実体は持ちません。代わりに配列といった別の場所で作られたデータ構造を参照します。 これをRustの所有権システムの用語では「データを所有せず、借用している」といいます。スライスのライフタイムが尽きてメモリから削除されても、それが借用していた実データはそのままメモリに残ります。
+
+> 一方、Box<[T]>はデータを所有します。実データはヒープと呼ばれるメモリ領域に格納され、このスライスのライフタイムが尽きると実データがメモリから削除されます。
+
+## 5-2-1　Box（std::boxed::Box<T>）
+- [Using Box<T> to Point to Data on the Heap - The Rust Programming Language](https://doc.rust-lang.org/book/ch15-01-box.html)
+- [std::boxed - Rust](https://doc.rust-lang.org/std/boxed/index.html)
+
+### moveでも大きな構造体はコストがかかる
+- [Rustの配置構文とbox構文 - 簡潔なQ](https://qnighy.hatenablog.com/entry/2017/06/06/220000)
+
+
+### 再帰的なデータ構造はコンパイル時にデータサイズが決まらないので`Box`が必要
+
+``` rust
+    enum List<T> {
+        Nil,
+        Cons(T, List<T>),
+    }
+```
+
+```
+error[E0072]: recursive type `main::List` has infinite size
+  --> src/main.rs:13:5
+   |
+13 |     enum List<T> {
+   |     ^^^^^^^^^^^^ recursive type has infinite size
+14 |         Nil,
+15 |         Cons(T, List<T>),
+   |                 ------- recursive without indirection
+   |
+   = help: insert indirection (e.g., a `Box`, `Rc`, or `&`) at some point to make `main::List` representable
+```
+
+``` rust
+    enum List<T> {
+        Nil,
+        Cons(T, Box<List<T>>),
+    }
+```
+
+### `Box`のサイズは一定
+- [Why is Box able to have a defined size when simply defined recursive type don't have a defined size? : rust](https://www.reddit.com/r/rust/comments/72f3az/why_is_box_able_to_have_a_defined_size_when/)
+``` rust
+    println!("Size: {}", std::mem::size_of::<()>());
+    println!("Size: {}", std::mem::size_of::<Box<()>>());
+    println!("Size: {}", std::mem::size_of::<char>());
+    println!("Size: {}", std::mem::size_of::<Box<char>>());
+    println!("Size: {}", std::mem::size_of::<u32>());
+    println!("Size: {}", std::mem::size_of::<Box<u32>>());
+    println!("Size: {}", std::mem::size_of::<Vec<String>>());
+    println!("Size: {}", std::mem::size_of::<Box<Vec<String>>>());
+```
+
+```
+Size: 0
+Size: 8
+Size: 4
+Size: 8
+Size: 4
+Size: 8
+Size: 24
+Size: 8
+```
+- [Rustでゼロサイズのヒープ領域を確保した時の挙動 - Qiita](https://qiita.com/garkimasera/items/6d36b1e6b566ce396a4a)

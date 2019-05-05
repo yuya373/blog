@@ -361,23 +361,29 @@ code, kbd, pre, samp {
 
   
   <style>
-kbd {
-    background-color: #fafbfc;
-    border: 1px solid #c6cbd1;
-    border-bottom-color: #959da5;
-    border-radius: 3px;
-    box-shadow: inset 0 -1px 0 #959da5;
-    color: #444d56;
-    display: inline-block;
-    font-size: 11px;
-    line-height: 10px;
-    padding: 3px 5px;
-    vertical-align: middle;
-}
+ kbd {
+     background-color: #fafbfc;
+     border: 1px solid #c6cbd1;
+     border-bottom-color: #959da5;
+     border-radius: 3px;
+     box-shadow: inset 0 -1px 0 #959da5;
+     color: #444d56;
+     display: inline-block;
+     font-size: 11px;
+     line-height: 10px;
+     padding: 3px 5px;
+     vertical-align: middle;
+ }
 
-code {
-    background-color: transparent;
-}
+ code {
+     background-color: transparent;
+ }
+
+ blockquote {
+     border-left: .25em solid #dfe2e5;
+     color: #6a737d;
+     padding: 0 1em;
+ }
 </style>
 
 </head>
@@ -472,6 +478,16 @@ code {
 <ul>
 <li><a href="#関数定義型">関数定義型</a></li>
 <li><a href="#クロージャの型">クロージャの型</a></li>
+</ul></li>
+<li><a href="#4-3-3-スライス">4-3-3　スライス</a>
+<ul>
+<li><a href="#ボックス化されたスライス">ボックス化されたスライス</a></li>
+</ul></li>
+<li><a href="#5-2-1-box-std-boxed-box-t">5-2-1　Box（std::boxed::Box<T>）</a>
+<ul>
+<li><a href="#moveでも大きな構造体はコストがかかる">moveでも大きな構造体はコストがかかる</a></li>
+<li><a href="#再帰的なデータ構造はコンパイル時にデータサイズが決まらないので-box-が必要">再帰的なデータ構造はコンパイル時にデータサイズが決まらないので<code>Box</code>が必要</a></li>
+<li><a href="#box-のサイズは一定"><code>Box</code>のサイズは一定</a></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -628,6 +644,85 @@ u32では64bit環境の場合足りない場合があり、u64なら32bit環境�
     = note: expected type `fn(i32) -&gt; i32`
                found type `[closure@src/main.rs:135:9: 135:18 x:_]`
 </code></pre>
+
+<h2 id="4-3-3-スライス">4-3-3　スライス</h2>
+
+<blockquote>
+<p>スライス型（slice type）は配列要素の範囲に効率よくアクセスするためのビューです。配列といってもスライスが対象とするデータ構造は配列だけではありません。連続したメモリ領域に同じ型の要素が並んでいるデータ構造なら、どれでも対象にできます。このようなデータ型にはベクタや、Rust以外の言語で作成した配列なども含まれます。</p>
+</blockquote>
+
+<h3 id="ボックス化されたスライス">ボックス化されたスライス</h3>
+
+<blockquote>
+<p>&amp;[T]や&amp;mut[T]といった一般的なスライスはポインタの一種で、それ自身はデータの実体は持ちません。代わりに配列といった別の場所で作られたデータ構造を参照します。 これをRustの所有権システムの用語では「データを所有せず、借用している」といいます。スライスのライフタイムが尽きてメモリから削除されても、それが借用していた実データはそのままメモリに残ります。</p>
+
+<p>一方、Box&lt;[T]&gt;はデータを所有します。実データはヒープと呼ばれるメモリ領域に格納され、このスライスのライフタイムが尽きると実データがメモリから削除されます。</p>
+</blockquote>
+
+<h2 id="5-2-1-box-std-boxed-box-t">5-2-1　Box（std::boxed::Box<T>）</h2>
+
+<ul>
+<li><a href="https://doc.rust-lang.org/book/ch15-01-box.html" target="_blank">Using Box<T> to Point to Data on the Heap - The Rust Programming Language</a></li>
+<li><a href="https://doc.rust-lang.org/std/boxed/index.html" target="_blank">std::boxed - Rust</a></li>
+</ul>
+
+<h3 id="moveでも大きな構造体はコストがかかる">moveでも大きな構造体はコストがかかる</h3>
+
+<ul>
+<li><a href="https://qnighy.hatenablog.com/entry/2017/06/06/220000" target="_blank">Rustの配置構文とbox構文 - 簡潔なQ</a></li>
+</ul>
+
+<h3 id="再帰的なデータ構造はコンパイル時にデータサイズが決まらないので-box-が必要">再帰的なデータ構造はコンパイル時にデータサイズが決まらないので<code>Box</code>が必要</h3>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">    <span style="color:#859900">enum</span> <span style="color:#cb4b16">List</span>&lt;<span style="color:#268bd2">T</span>&gt; {
+        <span style="color:#268bd2">Nil</span>,
+        <span style="color:#268bd2">Cons</span>(<span style="color:#268bd2">T</span>, <span style="color:#268bd2">List</span>&lt;<span style="color:#268bd2">T</span>&gt;),
+    }
+</code></pre></div>
+<pre><code>error[E0072]: recursive type `main::List` has infinite size
+  --&gt; src/main.rs:13:5
+   |
+13 |     enum List&lt;T&gt; {
+   |     ^^^^^^^^^^^^ recursive type has infinite size
+14 |         Nil,
+15 |         Cons(T, List&lt;T&gt;),
+   |                 ------- recursive without indirection
+   |
+   = help: insert indirection (e.g., a `Box`, `Rc`, or `&amp;`) at some point to make `main::List` representable
+</code></pre>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">    <span style="color:#859900">enum</span> <span style="color:#cb4b16">List</span>&lt;<span style="color:#268bd2">T</span>&gt; {
+        <span style="color:#268bd2">Nil</span>,
+        <span style="color:#268bd2">Cons</span>(<span style="color:#268bd2">T</span>, <span style="color:#cb4b16">Box</span>&lt;<span style="color:#268bd2">List</span>&lt;<span style="color:#268bd2">T</span>&gt;&gt;),
+    }
+</code></pre></div>
+<h3 id="box-のサイズは一定"><code>Box</code>のサイズは一定</h3>
+
+<ul>
+<li><a href="https://www.reddit.com/r/rust/comments/72f3az/why_is_box_able_to_have_a_defined_size_when/" target="_blank">Why is Box able to have a defined size when simply defined recursive type don&rsquo;t have a defined size? : rust</a>
+<code>rust
+println!(&quot;Size: {}&quot;, std::mem::size_of::&lt;()&gt;());
+println!(&quot;Size: {}&quot;, std::mem::size_of::&lt;Box&lt;()&gt;&gt;());
+println!(&quot;Size: {}&quot;, std::mem::size_of::&lt;char&gt;());
+println!(&quot;Size: {}&quot;, std::mem::size_of::&lt;Box&lt;char&gt;&gt;());
+println!(&quot;Size: {}&quot;, std::mem::size_of::&lt;u32&gt;());
+println!(&quot;Size: {}&quot;, std::mem::size_of::&lt;Box&lt;u32&gt;&gt;());
+println!(&quot;Size: {}&quot;, std::mem::size_of::&lt;Vec&lt;String&gt;&gt;());
+println!(&quot;Size: {}&quot;, std::mem::size_of::&lt;Box&lt;Vec&lt;String&gt;&gt;&gt;());
+</code></li>
+</ul>
+
+<pre><code>Size: 0
+Size: 8
+Size: 4
+Size: 8
+Size: 4
+Size: 8
+Size: 24
+Size: 8
+</code></pre>
+
+<ul>
+<li><a href="https://qiita.com/garkimasera/items/6d36b1e6b566ce396a4a" target="_blank">Rustでゼロサイズのヒープ領域を確保した時の挙動 - Qiita</a></li>
+</ul>
 
       </div>
     </div>
