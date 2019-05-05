@@ -70,3 +70,100 @@ https://doc.rust-lang.org/std/ops/trait.FnOnce.html
 > This trait is automatically implemented when the compiler determines it's appropriate.
 
 > The precise definition is: a type T is Sync if and only if &T is Send. In other words, if there is no possibility of undefined behavior (including data races) when passing &T references between threads.
+
+## 4-2-3　固定精度の整数
+
+### アドレス幅の整数型
+- [rust - What's the difference between `usize` and `u32`? - Stack Overflow](https://stackoverflow.com/questions/29592256/whats-the-difference-between-usize-and-u32)
+- [Beginner question: Should I use usize and isize for my numbers? : rust](https://www.reddit.com/r/rust/comments/4lql5l/beginner_question_should_i_use_usize_and_isize/)
+- [usize - Rust](https://doc.rust-lang.org/std/primitive.usize.html)
+- [isize - Rust](https://doc.rust-lang.org/std/primitive.isize.html)
+
+`usize`, `isize`はメモリアドレスの幅(32bit, 64bit)によってサイズが変わる。
+メモリアドレスを指し示す場合に使う
+u32では64bit環境の場合足りない場合があり、u64なら32bit環境の場合あふれてしまう？
+
+## 4-2-8　関数ポインタ
+
+``` rust
+    fn double(n: i32) -> i32 {
+        n + n
+    }
+
+    let mut f: fn(i32) -> i32 = double;
+```
+
+`f`に型注釈が必要。型注釈がないと関数定義型と推論される
+
+### 関数定義型
+関数定義型は関数によって異なる。
+
+``` rust
+    let mut f_bad = double;
+    f_bad = abs;
+```
+
+```
+    error[E0308]: mismatched types
+       --> src/main.rs:103:13
+        |
+    103 |     f_bad = abs;
+        |             ^^^ expected fn item, found a different fn item
+        |
+        = note: expected type `fn(i32) -> i32 {main::double}`
+                   found type `fn(i32) -> i32 {main::abs}`
+```
+
+関数定義型の値のサイズは0バイト
+
+``` rust
+    assert_eq!(std::mem::size_of_val(&f_bad), 0);
+```
+
+### クロージャの型
+クロージャを定義する毎に専用の匿名型が作られる。
+
+``` rust
+    let b = 5;
+    let mut f = |a| a * 3 + b;
+    f = |a| a * 4 + b;
+```
+
+```
+error[E0308]: mismatched types
+   --> src/main.rs:133:9
+    |
+133 |     f = |a| a * 4 + b;
+    |         ^^^^^^^^^^^^^ expected closure, found a different closure
+    |
+    = note: expected type `[closure@src/main.rs:132:17: 132:30 b:_]`
+               found type `[closure@src/main.rs:133:9: 133:22 b:_]`
+    = note: no two closures, even if identical, have the same type
+    = help: consider boxing your closure and/or using it as a trait object
+```
+
+クロージャは関数ポインタ型にもなれる
+
+``` rust
+    let mut f: fn(i32) -> i32 = |n| n * 3;
+    assert_eq!(f(-42), -126);
+```
+
+環境になにかを補足しているクロージャは関数ポインタ型にはなれない。
+
+``` rust
+    let x = 4;
+    f = |n| n * x;
+```
+
+```
+error[E0308]: mismatched types
+   --> src/main.rs:135:9
+    |
+135 |     f = |n| n * x;
+    |         ^^^^^^^^^ expected fn pointer, found closure
+    |
+    = note: expected type `fn(i32) -> i32`
+               found type `[closure@src/main.rs:135:9: 135:18 x:_]`
+```
+

@@ -357,7 +357,7 @@ code, kbd, pre, samp {
   
   
 
-  <meta name="generator" content="Hugo 0.54.0" />
+  <meta name="generator" content="Hugo 0.55.3" />
 
   
   <style>
@@ -464,6 +464,15 @@ code {
 <li><a href="#https-doc-rust-lang-org-std-marker-trait-sync-html"><a href="https://doc.rust-lang.org/std/marker/trait.Sync.html" target="_blank">https://doc.rust-lang.org/std/marker/trait.Sync.html</a></a></li>
 </ul></li>
 </ul></li>
+<li><a href="#4-2-3-固定精度の整数">4-2-3　固定精度の整数</a>
+<ul>
+<li><a href="#アドレス幅の整数型">アドレス幅の整数型</a></li>
+</ul></li>
+<li><a href="#4-2-8-関数ポインタ">4-2-8　関数ポインタ</a>
+<ul>
+<li><a href="#関数定義型">関数定義型</a></li>
+<li><a href="#クロージャの型">クロージャの型</a></li>
+</ul></li>
 </ul></li>
 </ul>
 </nav>
@@ -539,6 +548,86 @@ consider boxing your closure and/or using it as a trait object [E0308]
 
 <p>The precise definition is: a type T is Sync if and only if &amp;T is Send. In other words, if there is no possibility of undefined behavior (including data races) when passing &amp;T references between threads.</p>
 </blockquote>
+
+<h2 id="4-2-3-固定精度の整数">4-2-3　固定精度の整数</h2>
+
+<h3 id="アドレス幅の整数型">アドレス幅の整数型</h3>
+
+<ul>
+<li><a href="https://stackoverflow.com/questions/29592256/whats-the-difference-between-usize-and-u32" target="_blank">rust - What&rsquo;s the difference between <code>usize</code> and <code>u32</code>? - Stack Overflow</a></li>
+<li><a href="https://www.reddit.com/r/rust/comments/4lql5l/beginner_question_should_i_use_usize_and_isize/" target="_blank">Beginner question: Should I use usize and isize for my numbers? : rust</a></li>
+<li><a href="https://doc.rust-lang.org/std/primitive.usize.html" target="_blank">usize - Rust</a></li>
+<li><a href="https://doc.rust-lang.org/std/primitive.isize.html" target="_blank">isize - Rust</a></li>
+</ul>
+
+<p><code>usize</code>, <code>isize</code>はメモリアドレスの幅(32bit, 64bit)によってサイズが変わる。
+メモリアドレスを指し示す場合に使う
+u32では64bit環境の場合足りない場合があり、u64なら32bit環境の場合あふれてしまう？</p>
+
+<h2 id="4-2-8-関数ポインタ">4-2-8　関数ポインタ</h2>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">    <span style="color:#859900">fn</span> <span style="color:#268bd2">double</span>(<span style="color:#268bd2">n</span>: <span style="color:#859900;font-weight:bold">i32</span>) -&gt; <span style="color:#859900;font-weight:bold">i32</span> {
+        <span style="color:#268bd2">n</span> + <span style="color:#268bd2">n</span>
+    }
+
+    <span style="color:#859900">let</span> <span style="color:#859900">mut</span> <span style="color:#268bd2">f</span>: <span style="color:#cb4b16">fn</span>(<span style="color:#859900;font-weight:bold">i32</span>) -&gt; <span style="color:#859900;font-weight:bold">i32</span> = <span style="color:#268bd2">double</span>;
+</code></pre></div>
+<p><code>f</code>に型注釈が必要。型注釈がないと関数定義型と推論される</p>
+
+<h3 id="関数定義型">関数定義型</h3>
+
+<p>関数定義型は関数によって異なる。</p>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">    <span style="color:#859900">let</span> <span style="color:#859900">mut</span> <span style="color:#268bd2">f_bad</span> = <span style="color:#268bd2">double</span>;
+    <span style="color:#268bd2">f_bad</span> = <span style="color:#268bd2">abs</span>;
+</code></pre></div>
+<pre><code>    error[E0308]: mismatched types
+       --&gt; src/main.rs:103:13
+        |
+    103 |     f_bad = abs;
+        |             ^^^ expected fn item, found a different fn item
+        |
+        = note: expected type `fn(i32) -&gt; i32 {main::double}`
+                   found type `fn(i32) -&gt; i32 {main::abs}`
+</code></pre>
+
+<p>関数定義型の値のサイズは0バイト</p>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">    <span style="color:#268bd2">assert_eq</span>!(<span style="color:#268bd2">std</span>::<span style="color:#268bd2">mem</span>::<span style="color:#268bd2">size_of_val</span>(&amp;<span style="color:#268bd2">f_bad</span>), <span style="color:#2aa198;font-weight:bold">0</span>);
+</code></pre></div>
+<h3 id="クロージャの型">クロージャの型</h3>
+
+<p>クロージャを定義する毎に専用の匿名型が作られる。</p>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">    <span style="color:#859900">let</span> <span style="color:#268bd2">b</span> = <span style="color:#2aa198;font-weight:bold">5</span>;
+    <span style="color:#859900">let</span> <span style="color:#859900">mut</span> <span style="color:#268bd2">f</span> = |<span style="color:#268bd2">a</span>| <span style="color:#268bd2">a</span> * <span style="color:#2aa198;font-weight:bold">3</span> + <span style="color:#268bd2">b</span>;
+    <span style="color:#268bd2">f</span> = |<span style="color:#268bd2">a</span>| <span style="color:#268bd2">a</span> * <span style="color:#2aa198;font-weight:bold">4</span> + <span style="color:#268bd2">b</span>;
+</code></pre></div>
+<pre><code>error[E0308]: mismatched types
+   --&gt; src/main.rs:133:9
+    |
+133 |     f = |a| a * 4 + b;
+    |         ^^^^^^^^^^^^^ expected closure, found a different closure
+    |
+    = note: expected type `[closure@src/main.rs:132:17: 132:30 b:_]`
+               found type `[closure@src/main.rs:133:9: 133:22 b:_]`
+    = note: no two closures, even if identical, have the same type
+    = help: consider boxing your closure and/or using it as a trait object
+</code></pre>
+
+<p>クロージャは関数ポインタ型にもなれる</p>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">    <span style="color:#859900">let</span> <span style="color:#859900">mut</span> <span style="color:#268bd2">f</span>: <span style="color:#cb4b16">fn</span>(<span style="color:#859900;font-weight:bold">i32</span>) -&gt; <span style="color:#859900;font-weight:bold">i32</span> = |<span style="color:#268bd2">n</span>| <span style="color:#268bd2">n</span> * <span style="color:#2aa198;font-weight:bold">3</span>;
+    <span style="color:#268bd2">assert_eq</span>!(<span style="color:#268bd2">f</span>(-<span style="color:#2aa198;font-weight:bold">42</span>), -<span style="color:#2aa198;font-weight:bold">126</span>);
+</code></pre></div>
+<p>環境になにかを補足しているクロージャは関数ポインタ型にはなれない。</p>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">    <span style="color:#859900">let</span> <span style="color:#268bd2">x</span> = <span style="color:#2aa198;font-weight:bold">4</span>;
+    <span style="color:#268bd2">f</span> = |<span style="color:#268bd2">n</span>| <span style="color:#268bd2">n</span> * <span style="color:#268bd2">x</span>;
+</code></pre></div>
+<pre><code>error[E0308]: mismatched types
+   --&gt; src/main.rs:135:9
+    |
+135 |     f = |n| n * x;
+    |         ^^^^^^^^^ expected fn pointer, found closure
+    |
+    = note: expected type `fn(i32) -&gt; i32`
+               found type `[closure@src/main.rs:135:9: 135:18 x:_]`
+</code></pre>
 
       </div>
     </div>
