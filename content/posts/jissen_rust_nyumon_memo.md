@@ -245,12 +245,15 @@ Size: 8
 > また事前に大まかな要素数が分かっているときはwith_capacity(要素数)メソッドを使うといいでしょう。ベクタに要素を追加していく際のメモリ再割り当てのオーバヘッドが削減できますので、大量の要素を追加するときはnew()よりも実行時間が短くなることが期待できます。
 
 ``` rust
-    let v: Vec<char> = Vec::with_capacity(1000);
+    let mut v: Vec<char> = Vec::with_capacity(1000);
+    println!("length: {}, capacity: {}", v.len(), v.capacity());
+    v.shrink_to_fit();
     println!("length: {}, capacity: {}", v.len(), v.capacity());
 ```
 
 ```
 length: 0, capacity: 1000
+length: 0, capacity: 0
 ```
 
 |               | 実データを格納するメモリ領域   | 実データを所有 | 要素の追加 |

@@ -728,10 +728,13 @@ Size: 8
 <blockquote>
 <p>また事前に大まかな要素数が分かっているときはwith_capacity(要素数)メソッドを使うといいでしょう。ベクタに要素を追加していく際のメモリ再割り当てのオーバヘッドが削減できますので、大量の要素を追加するときはnew()よりも実行時間が短くなることが期待できます。</p>
 </blockquote>
-<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">    <span style="color:#859900">let</span> <span style="color:#268bd2">v</span>: <span style="color:#cb4b16">Vec</span>&lt;<span style="color:#268bd2">char</span>&gt; = <span style="color:#cb4b16">Vec</span>::<span style="color:#268bd2">with_capacity</span>(<span style="color:#2aa198;font-weight:bold">1000</span>);
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">    <span style="color:#859900">let</span> <span style="color:#859900">mut</span> <span style="color:#268bd2">v</span>: <span style="color:#cb4b16">Vec</span>&lt;<span style="color:#268bd2">char</span>&gt; = <span style="color:#cb4b16">Vec</span>::<span style="color:#268bd2">with_capacity</span>(<span style="color:#2aa198;font-weight:bold">1000</span>);
+    <span style="color:#268bd2">println</span>!(<span style="color:#2aa198">&#34;length: {}, capacity: {}&#34;</span>, <span style="color:#268bd2">v</span>.<span style="color:#268bd2">len</span>(), <span style="color:#268bd2">v</span>.<span style="color:#268bd2">capacity</span>());
+    <span style="color:#268bd2">v</span>.<span style="color:#268bd2">shrink_to_fit</span>();
     <span style="color:#268bd2">println</span>!(<span style="color:#2aa198">&#34;length: {}, capacity: {}&#34;</span>, <span style="color:#268bd2">v</span>.<span style="color:#268bd2">len</span>(), <span style="color:#268bd2">v</span>.<span style="color:#268bd2">capacity</span>());
 </code></pre></div>
 <pre><code>length: 0, capacity: 1000
+length: 0, capacity: 0
 </code></pre>
 
 <table class='pure-table pure-table-striped'>
