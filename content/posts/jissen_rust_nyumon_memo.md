@@ -239,3 +239,42 @@ Size: 24
 Size: 8
 ```
 - [Rustでゼロサイズのヒープ領域を確保した時の挙動 - Qiita](https://qiita.com/garkimasera/items/6d36b1e6b566ce396a4a)
+
+## 5-2-2　ベクタ（std::vec::Vec<T>）
+
+> また事前に大まかな要素数が分かっているときはwith_capacity(要素数)メソッドを使うといいでしょう。ベクタに要素を追加していく際のメモリ再割り当てのオーバヘッドが削減できますので、大量の要素を追加するときはnew()よりも実行時間が短くなることが期待できます。
+
+``` rust
+    let v: Vec<char> = Vec::with_capacity(1000);
+    println!("length: {}, capacity: {}", v.len(), v.capacity());
+```
+
+```
+length: 0, capacity: 1000
+```
+
+|               | 実データを格納するメモリ領域   | 実データを所有 | 要素の追加 |
+|:-------------:|:------------------------------:|:--------------:|:----------:|
+| `Vec<T>`      | ヒープ                         | する           | ○         |
+| `[T; n]`      | スタック                       | する           | ×         |
+| `Box<[T]>`    | ヒープ                         | する           | ×         |
+| `&[T]`, `[T]` | ヒープorスタック、参照先に依存 | しない         | ×         |
+
+
+- ベクタは要素数の増加に備えて余分なスペースをヒープ領域に確保する
+- `Box<[T]>`は余分なスペースを持たない
+
+``` rust
+    let mut v1 = vec![0, 1, 2, 3];
+    v1.push(4);
+    println!("v1 len: {}, capacity: {}", v1.len(), v1.capacity());
+    let s1 = v1.into_boxed_slice();
+    let v2 = s1.into_vec();
+    println!("v2 len: {}, capacity: {}", v2.len(), v2.capacity());
+```
+
+```
+v1 len: 5, capacity: 8
+v2 len: 5, capacity: 5
+```
+

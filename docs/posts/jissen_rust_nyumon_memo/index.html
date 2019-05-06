@@ -489,6 +489,7 @@ code, kbd, pre, samp {
 <li><a href="#再帰的なデータ構造はコンパイル時にデータサイズが決まらないので-box-が必要">再帰的なデータ構造はコンパイル時にデータサイズが決まらないので<code>Box</code>が必要</a></li>
 <li><a href="#box-のサイズは一定"><code>Box</code>のサイズは一定</a></li>
 </ul></li>
+<li><a href="#5-2-2-ベクタ-std-vec-vec-t">5-2-2　ベクタ（std::vec::Vec<T>）</a></li>
 </ul></li>
 </ul>
 </nav>
@@ -721,6 +722,73 @@ Size: 8
 <ul>
 <li><a href="https://qiita.com/garkimasera/items/6d36b1e6b566ce396a4a" target="_blank">Rustでゼロサイズのヒープ領域を確保した時の挙動 - Qiita</a></li>
 </ul>
+
+<h2 id="5-2-2-ベクタ-std-vec-vec-t">5-2-2　ベクタ（std::vec::Vec<T>）</h2>
+
+<blockquote>
+<p>また事前に大まかな要素数が分かっているときはwith_capacity(要素数)メソッドを使うといいでしょう。ベクタに要素を追加していく際のメモリ再割り当てのオーバヘッドが削減できますので、大量の要素を追加するときはnew()よりも実行時間が短くなることが期待できます。</p>
+</blockquote>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">    <span style="color:#859900">let</span> <span style="color:#268bd2">v</span>: <span style="color:#cb4b16">Vec</span>&lt;<span style="color:#268bd2">char</span>&gt; = <span style="color:#cb4b16">Vec</span>::<span style="color:#268bd2">with_capacity</span>(<span style="color:#2aa198;font-weight:bold">1000</span>);
+    <span style="color:#268bd2">println</span>!(<span style="color:#2aa198">&#34;length: {}, capacity: {}&#34;</span>, <span style="color:#268bd2">v</span>.<span style="color:#268bd2">len</span>(), <span style="color:#268bd2">v</span>.<span style="color:#268bd2">capacity</span>());
+</code></pre></div>
+<pre><code>length: 0, capacity: 1000
+</code></pre>
+
+<table class='pure-table pure-table-striped'>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">実データを格納するメモリ領域</th>
+<th align="center">実データを所有</th>
+<th align="center">要素の追加</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center"><code>Vec&lt;T&gt;</code></td>
+<td align="center">ヒープ</td>
+<td align="center">する</td>
+<td align="center">○</td>
+</tr>
+
+<tr>
+<td align="center"><code>[T; n]</code></td>
+<td align="center">スタック</td>
+<td align="center">する</td>
+<td align="center">×</td>
+</tr>
+
+<tr>
+<td align="center"><code>Box&lt;[T]&gt;</code></td>
+<td align="center">ヒープ</td>
+<td align="center">する</td>
+<td align="center">×</td>
+</tr>
+
+<tr>
+<td align="center"><code>&amp;[T]</code>, <code>[T]</code></td>
+<td align="center">ヒープorスタック、参照先に依存</td>
+<td align="center">しない</td>
+<td align="center">×</td>
+</tr>
+</tbody>
+</table>
+
+<ul>
+<li>ベクタは要素数の増加に備えて余分なスペースをヒープ領域に確保する</li>
+<li><code>Box&lt;[T]&gt;</code>は余分なスペースを持たない</li>
+</ul>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">    <span style="color:#859900">let</span> <span style="color:#859900">mut</span> <span style="color:#268bd2">v1</span> = <span style="color:#268bd2">vec</span>![<span style="color:#2aa198;font-weight:bold">0</span>, <span style="color:#2aa198;font-weight:bold">1</span>, <span style="color:#2aa198;font-weight:bold">2</span>, <span style="color:#2aa198;font-weight:bold">3</span>];
+    <span style="color:#268bd2">v1</span>.<span style="color:#268bd2">push</span>(<span style="color:#2aa198;font-weight:bold">4</span>);
+    <span style="color:#268bd2">println</span>!(<span style="color:#2aa198">&#34;v1 len: {}, capacity: {}&#34;</span>, <span style="color:#268bd2">v1</span>.<span style="color:#268bd2">len</span>(), <span style="color:#268bd2">v1</span>.<span style="color:#268bd2">capacity</span>());
+    <span style="color:#859900">let</span> <span style="color:#268bd2">s1</span> = <span style="color:#268bd2">v1</span>.<span style="color:#268bd2">into_boxed_slice</span>();
+    <span style="color:#859900">let</span> <span style="color:#268bd2">v2</span> = <span style="color:#268bd2">s1</span>.<span style="color:#268bd2">into_vec</span>();
+    <span style="color:#268bd2">println</span>!(<span style="color:#2aa198">&#34;v2 len: {}, capacity: {}&#34;</span>, <span style="color:#268bd2">v2</span>.<span style="color:#268bd2">len</span>(), <span style="color:#268bd2">v2</span>.<span style="color:#268bd2">capacity</span>());
+</code></pre></div>
+<pre><code>v1 len: 5, capacity: 8
+v2 len: 5, capacity: 5
+</code></pre>
 
       </div>
     </div>
