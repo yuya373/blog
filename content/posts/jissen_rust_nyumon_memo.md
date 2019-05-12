@@ -281,3 +281,140 @@ v1 len: 5, capacity: 8
 v2 len: 5, capacity: 5
 ```
 
+## 5-2-7　リザルト（std::result::Result<T, E>）
+
+> 独自のエラー型を定義する際は、std::convert::Fromという型変換用のトレイトを実装するのがお勧めです。こうすると?演算子が関数の戻り値の型に合うようにエラーを変換してくれます。つまり、いちいちmap_err()で変換する必要がなくなります。
+
+### [std::convert::From - Rust](https://doc.rust-lang.org/std/convert/trait.From.html)
+
+``` rust
+    enum MyError {
+        ParseError(std::num::ParseIntError),
+    }
+
+    fn f() -> Result<(), MyError> {
+        "abc".parse::<i32>()?;
+        Ok(())
+    }
+```
+
+```
+error[E0277]: `?` couldn't convert the error to `main::MyError`
+   --> src/main.rs:218:29
+    |
+218 |         "abc".parse::<i32>()?;
+    |                             ^ the trait `std::convert::From<std::num::ParseIntError>` is not implemented for `main::MyError`
+    |
+    = note: required by `std::convert::From::from`
+```
+
+``` rust
+    enum MyError {
+        ParseError(std::num::ParseIntError),
+    }
+
+    fn f() -> Result<(), MyError> {
+        "abc".parse::<i32>()?;
+        Ok(())
+    }
+
+    impl std::convert::From<std::num::ParseIntError> for MyError {
+        fn from(source: std::num::ParseIntError) -> Self {
+            MyError::ParseError(source)
+        }
+    }
+```
+
+## 5-3-2　構造体（struct）
+### デフォルト値の設定
+
+``` rust
+ #[derive(Default)]
+ struct Polygon {
+     vertexes: Vec<(i32, i32)>,
+     stroke_width: u8,
+     fill: (u8, u8, u8),
+ }
+```
+
+``` rust
+    struct Polygon {
+        vertexes: Vec<(i32, i32)>,
+        stroke_width: u8,
+        fill: (u8, u8, u8),
+    }
+
+    impl Default for Polygon {
+        fn default() -> Self {
+            Self {
+                stroke_width: 1,
+                vertexes: Default::default(),
+                fill: Default::default(),
+            }
+        }
+    }
+
+    let p: Polygon = Default::default();
+    assert_eq!(p.stroke_width, 1);
+```
+
+
+### タプル構造体
+
+> タプル構造体の便利な使い方の1つにnewtype＊6と呼ばれるRust特有のデザインパターンがあります。これは型エイリアスの代わりにフィールドが1つのタプル構造体を定義することで、コンパイラの型チェックを強化するテクニックです。
+
+``` rust
+    type UserName = String;
+    type Id = i64;
+    type Timestamp = i64;
+    type User = (Id, UserName, Timestamp);
+
+    fn new_user(name: UserName, id: Id, created: Timestamp) -> User {
+        (id, name, created)
+    }
+
+    let id = 400;
+    let now = 4567890123;
+    let user = new_user(String::from("mika"), id, now);
+
+    // no compile error
+    let bad_user = new_user(String::from("bad user"), now, id);
+```
+
+``` rust
+        struct UserName(String);
+        struct Id(u64);
+        struct Timestamp(u64);
+
+        type User = (Id, UserName, Timestamp);
+
+        fn new_user(name: UserName, id: Id, created: Timestamp) -> User {
+            (id, name, created)
+        }
+
+        let id = Id(400);
+        let now = Timestamp(4567890123);
+        let bad_user = new_user(UserName(String::from("bad user")), now, id);
+```
+
+```
+error[E0308]: mismatched types
+   --> src/main.rs:339:69
+    |
+339 |         let bad_user = new_user(UserName(String::from("bad user")), now, id);
+    |                                                                     ^^^ expected struct `main::Id`, found struct `main::Timestamp`
+    |
+    = note: expected type `main::Id`
+               found type `main::Timestamp`
+
+error[E0308]: mismatched types
+   --> src/main.rs:339:74
+    |
+339 |         let bad_user = new_user(UserName(String::from("bad user")), now, id);
+    |                                                                          ^^ expected struct `main::Timestamp`, found struct `main::Id`
+    |
+    = note: expected type `main::Timestamp`
+               found type `main::Id`
+```
+
+> フィールドが1つのタプル構造体はゼロコスト抽象化の対象になり、そのメモリ上の表現は包んでいる型の表現と基本的に同じになります。たとえば上のId(400)のメモリ上のサイズは、u64型の400のメモリ上のサイズと同じ8バイトになるはずです。ただしコンパイラはデフォルトではメモリ上の表現が同一であることを保証しません。それを保証するためには構造体の定義に#[repr(transparent)]アトリビュートを付けます＊7。

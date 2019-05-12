@@ -357,7 +357,7 @@ code, kbd, pre, samp {
   
   
 
-  <meta name="generator" content="Hugo 0.55.3" />
+  <meta name="generator" content="Hugo 0.55.5" />
 
   
   <style>
@@ -490,6 +490,15 @@ code, kbd, pre, samp {
 <li><a href="#box-のサイズは一定"><code>Box</code>のサイズは一定</a></li>
 </ul></li>
 <li><a href="#5-2-2-ベクタ-std-vec-vec-t">5-2-2　ベクタ（std::vec::Vec<T>）</a></li>
+<li><a href="#5-2-7-リザルト-std-result-result-t-e">5-2-7　リザルト（std::result::Result<T, E>）</a>
+<ul>
+<li><a href="#std-convert-from-rust-https-doc-rust-lang-org-std-convert-trait-from-html"><a href="https://doc.rust-lang.org/std/convert/trait.From.html" target="_blank">std::convert::From - Rust</a></a></li>
+</ul></li>
+<li><a href="#5-3-2-構造体-struct">5-3-2　構造体（struct）</a>
+<ul>
+<li><a href="#デフォルト値の設定">デフォルト値の設定</a></li>
+<li><a href="#タプル構造体">タプル構造体</a></li>
+</ul></li>
 </ul></li>
 </ul>
 </nav>
@@ -792,6 +801,130 @@ length: 0, capacity: 0
 <pre><code>v1 len: 5, capacity: 8
 v2 len: 5, capacity: 5
 </code></pre>
+
+<h2 id="5-2-7-リザルト-std-result-result-t-e">5-2-7　リザルト（std::result::Result<T, E>）</h2>
+
+<blockquote>
+<p>独自のエラー型を定義する際は、std::convert::Fromという型変換用のトレイトを実装するのがお勧めです。こうすると?演算子が関数の戻り値の型に合うようにエラーを変換してくれます。つまり、いちいちmap_err()で変換する必要がなくなります。</p>
+</blockquote>
+
+<h3 id="std-convert-from-rust-https-doc-rust-lang-org-std-convert-trait-from-html"><a href="https://doc.rust-lang.org/std/convert/trait.From.html" target="_blank">std::convert::From - Rust</a></h3>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">    <span style="color:#859900">enum</span> <span style="color:#cb4b16">MyError</span> {
+        <span style="color:#268bd2">ParseError</span>(<span style="color:#268bd2">std</span>::<span style="color:#268bd2">num</span>::<span style="color:#268bd2">ParseIntError</span>),
+    }
+
+    <span style="color:#859900">fn</span> <span style="color:#268bd2">f</span>() -&gt; <span style="color:#cb4b16">Result</span>&lt;(), <span style="color:#268bd2">MyError</span>&gt; {
+        <span style="color:#2aa198">&#34;abc&#34;</span>.<span style="color:#268bd2">parse</span>::&lt;<span style="color:#859900;font-weight:bold">i32</span>&gt;()?;
+        <span style="color:#cb4b16">Ok</span>(())
+    }
+</code></pre></div>
+<pre><code>error[E0277]: `?` couldn't convert the error to `main::MyError`
+   --&gt; src/main.rs:218:29
+    |
+218 |         &quot;abc&quot;.parse::&lt;i32&gt;()?;
+    |                             ^ the trait `std::convert::From&lt;std::num::ParseIntError&gt;` is not implemented for `main::MyError`
+    |
+    = note: required by `std::convert::From::from`
+</code></pre>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">    <span style="color:#859900">enum</span> <span style="color:#cb4b16">MyError</span> {
+        <span style="color:#268bd2">ParseError</span>(<span style="color:#268bd2">std</span>::<span style="color:#268bd2">num</span>::<span style="color:#268bd2">ParseIntError</span>),
+    }
+
+    <span style="color:#859900">fn</span> <span style="color:#268bd2">f</span>() -&gt; <span style="color:#cb4b16">Result</span>&lt;(), <span style="color:#268bd2">MyError</span>&gt; {
+        <span style="color:#2aa198">&#34;abc&#34;</span>.<span style="color:#268bd2">parse</span>::&lt;<span style="color:#859900;font-weight:bold">i32</span>&gt;()?;
+        <span style="color:#cb4b16">Ok</span>(())
+    }
+
+    <span style="color:#859900">impl</span> <span style="color:#268bd2">std</span>::<span style="color:#268bd2">convert</span>::<span style="color:#cb4b16">From</span>&lt;<span style="color:#268bd2">std</span>::<span style="color:#268bd2">num</span>::<span style="color:#268bd2">ParseIntError</span>&gt; <span style="color:#859900">for</span> <span style="color:#268bd2">MyError</span> {
+        <span style="color:#859900">fn</span> <span style="color:#268bd2">from</span>(<span style="color:#268bd2">source</span>: <span style="color:#cb4b16">std</span>::<span style="color:#268bd2">num</span>::<span style="color:#268bd2">ParseIntError</span>) -&gt; <span style="color:#cb4b16">Self</span> {
+            <span style="color:#268bd2">MyError</span>::<span style="color:#268bd2">ParseError</span>(<span style="color:#268bd2">source</span>)
+        }
+    }
+</code></pre></div>
+<h2 id="5-3-2-構造体-struct">5-3-2　構造体（struct）</h2>
+
+<h3 id="デフォルト値の設定">デフォルト値の設定</h3>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"> <span style="color:#93a1a1;font-style:italic">#[derive(Default)]</span>
+ <span style="color:#859900">struct</span> <span style="color:#cb4b16">Polygon</span> {
+     <span style="color:#268bd2">vertexes</span>: <span style="color:#cb4b16">Vec</span>&lt;(<span style="color:#859900;font-weight:bold">i32</span>, <span style="color:#859900;font-weight:bold">i32</span>)&gt;,
+     <span style="color:#268bd2">stroke_width</span>: <span style="color:#859900;font-weight:bold">u8</span>,
+     <span style="color:#268bd2">fill</span>: (<span style="color:#859900;font-weight:bold">u8</span>, <span style="color:#859900;font-weight:bold">u8</span>, <span style="color:#859900;font-weight:bold">u8</span>),
+ }
+</code></pre></div><div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">    <span style="color:#859900">struct</span> <span style="color:#cb4b16">Polygon</span> {
+        <span style="color:#268bd2">vertexes</span>: <span style="color:#cb4b16">Vec</span>&lt;(<span style="color:#859900;font-weight:bold">i32</span>, <span style="color:#859900;font-weight:bold">i32</span>)&gt;,
+        <span style="color:#268bd2">stroke_width</span>: <span style="color:#859900;font-weight:bold">u8</span>,
+        <span style="color:#268bd2">fill</span>: (<span style="color:#859900;font-weight:bold">u8</span>, <span style="color:#859900;font-weight:bold">u8</span>, <span style="color:#859900;font-weight:bold">u8</span>),
+    }
+
+    <span style="color:#859900">impl</span> <span style="color:#cb4b16">Default</span> <span style="color:#859900">for</span> <span style="color:#268bd2">Polygon</span> {
+        <span style="color:#859900">fn</span> <span style="color:#268bd2">default</span>() -&gt; <span style="color:#cb4b16">Self</span> {
+            <span style="color:#268bd2">Self</span> {
+                <span style="color:#268bd2">stroke_width</span>: <span style="color:#2aa198;font-weight:bold">1</span>,
+                <span style="color:#268bd2">vertexes</span>: <span style="color:#cb4b16">Default</span>::<span style="color:#268bd2">default</span>(),
+                <span style="color:#268bd2">fill</span>: <span style="color:#cb4b16">Default</span>::<span style="color:#268bd2">default</span>(),
+            }
+        }
+    }
+
+    <span style="color:#859900">let</span> <span style="color:#268bd2">p</span>: <span style="color:#cb4b16">Polygon</span> = <span style="color:#cb4b16">Default</span>::<span style="color:#268bd2">default</span>();
+    <span style="color:#268bd2">assert_eq</span>!(<span style="color:#268bd2">p</span>.<span style="color:#268bd2">stroke_width</span>, <span style="color:#2aa198;font-weight:bold">1</span>);
+</code></pre></div>
+<h3 id="タプル構造体">タプル構造体</h3>
+
+<blockquote>
+<p>タプル構造体の便利な使い方の1つにnewtype＊6と呼ばれるRust特有のデザインパターンがあります。これは型エイリアスの代わりにフィールドが1つのタプル構造体を定義することで、コンパイラの型チェックを強化するテクニックです。</p>
+</blockquote>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">    <span style="color:#859900">type</span> <span style="color:#cb4b16">UserName</span> = <span style="color:#cb4b16">String</span>;
+    <span style="color:#859900">type</span> <span style="color:#cb4b16">Id</span> = <span style="color:#859900;font-weight:bold">i64</span>;
+    <span style="color:#859900">type</span> <span style="color:#cb4b16">Timestamp</span> = <span style="color:#859900;font-weight:bold">i64</span>;
+    <span style="color:#859900">type</span> <span style="color:#cb4b16">User</span> = (<span style="color:#268bd2">Id</span>, <span style="color:#268bd2">UserName</span>, <span style="color:#268bd2">Timestamp</span>);
+
+    <span style="color:#859900">fn</span> <span style="color:#268bd2">new_user</span>(<span style="color:#268bd2">name</span>: <span style="color:#cb4b16">UserName</span>, <span style="color:#268bd2">id</span>: <span style="color:#cb4b16">Id</span>, <span style="color:#268bd2">created</span>: <span style="color:#cb4b16">Timestamp</span>) -&gt; <span style="color:#cb4b16">User</span> {
+        (<span style="color:#268bd2">id</span>, <span style="color:#268bd2">name</span>, <span style="color:#268bd2">created</span>)
+    }
+
+    <span style="color:#859900">let</span> <span style="color:#268bd2">id</span> = <span style="color:#2aa198;font-weight:bold">400</span>;
+    <span style="color:#859900">let</span> <span style="color:#268bd2">now</span> = <span style="color:#2aa198;font-weight:bold">4567890123</span>;
+    <span style="color:#859900">let</span> <span style="color:#268bd2">user</span> = <span style="color:#268bd2">new_user</span>(<span style="color:#cb4b16">String</span>::<span style="color:#268bd2">from</span>(<span style="color:#2aa198">&#34;mika&#34;</span>), <span style="color:#268bd2">id</span>, <span style="color:#268bd2">now</span>);
+
+    <span style="color:#93a1a1;font-style:italic">// no compile error
+</span><span style="color:#93a1a1;font-style:italic"></span>    <span style="color:#859900">let</span> <span style="color:#268bd2">bad_user</span> = <span style="color:#268bd2">new_user</span>(<span style="color:#cb4b16">String</span>::<span style="color:#268bd2">from</span>(<span style="color:#2aa198">&#34;bad user&#34;</span>), <span style="color:#268bd2">now</span>, <span style="color:#268bd2">id</span>);
+</code></pre></div><div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">        <span style="color:#859900">struct</span> <span style="color:#cb4b16">UserName</span>(<span style="color:#cb4b16">String</span>);
+        <span style="color:#859900">struct</span> <span style="color:#cb4b16">Id</span>(<span style="color:#859900;font-weight:bold">u64</span>);
+        <span style="color:#859900">struct</span> <span style="color:#cb4b16">Timestamp</span>(<span style="color:#859900;font-weight:bold">u64</span>);
+
+        <span style="color:#859900">type</span> <span style="color:#cb4b16">User</span> = (<span style="color:#268bd2">Id</span>, <span style="color:#268bd2">UserName</span>, <span style="color:#268bd2">Timestamp</span>);
+
+        <span style="color:#859900">fn</span> <span style="color:#268bd2">new_user</span>(<span style="color:#268bd2">name</span>: <span style="color:#cb4b16">UserName</span>, <span style="color:#268bd2">id</span>: <span style="color:#cb4b16">Id</span>, <span style="color:#268bd2">created</span>: <span style="color:#cb4b16">Timestamp</span>) -&gt; <span style="color:#cb4b16">User</span> {
+            (<span style="color:#268bd2">id</span>, <span style="color:#268bd2">name</span>, <span style="color:#268bd2">created</span>)
+        }
+
+        <span style="color:#859900">let</span> <span style="color:#268bd2">id</span> = <span style="color:#268bd2">Id</span>(<span style="color:#2aa198;font-weight:bold">400</span>);
+        <span style="color:#859900">let</span> <span style="color:#268bd2">now</span> = <span style="color:#268bd2">Timestamp</span>(<span style="color:#2aa198;font-weight:bold">4567890123</span>);
+        <span style="color:#859900">let</span> <span style="color:#268bd2">bad_user</span> = <span style="color:#268bd2">new_user</span>(<span style="color:#268bd2">UserName</span>(<span style="color:#cb4b16">String</span>::<span style="color:#268bd2">from</span>(<span style="color:#2aa198">&#34;bad user&#34;</span>)), <span style="color:#268bd2">now</span>, <span style="color:#268bd2">id</span>);
+</code></pre></div>
+<pre><code>error[E0308]: mismatched types
+   --&gt; src/main.rs:339:69
+    |
+339 |         let bad_user = new_user(UserName(String::from(&quot;bad user&quot;)), now, id);
+    |                                                                     ^^^ expected struct `main::Id`, found struct `main::Timestamp`
+    |
+    = note: expected type `main::Id`
+               found type `main::Timestamp`
+
+error[E0308]: mismatched types
+   --&gt; src/main.rs:339:74
+    |
+339 |         let bad_user = new_user(UserName(String::from(&quot;bad user&quot;)), now, id);
+    |                                                                          ^^ expected struct `main::Timestamp`, found struct `main::Id`
+    |
+    = note: expected type `main::Timestamp`
+               found type `main::Id`
+</code></pre>
+
+<blockquote>
+<p>フィールドが1つのタプル構造体はゼロコスト抽象化の対象になり、そのメモリ上の表現は包んでいる型の表現と基本的に同じになります。たとえば上のId(400)のメモリ上のサイズは、u64型の400のメモリ上のサイズと同じ8バイトになるはずです。ただしコンパイラはデフォルトではメモリ上の表現が同一であることを保証しません。それを保証するためには構造体の定義に#[repr(transparent)]アトリビュートを付けます＊7。</p>
+</blockquote>
 
       </div>
     </div>
