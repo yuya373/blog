@@ -6,6 +6,7 @@ isCJKLanguage: true
 tags: ["Rust", "reading notes"]
 ---
 
+# 実践Rust入門のメモ
 ## 3-5-4　クロージャの型について
 ### Rustのクロージャの型は全て違う
 
@@ -418,3 +419,97 @@ error[E0308]: mismatched types
 ```
 
 > フィールドが1つのタプル構造体はゼロコスト抽象化の対象になり、そのメモリ上の表現は包んでいる型の表現と基本的に同じになります。たとえば上のId(400)のメモリ上のサイズは、u64型の400のメモリ上のサイズと同じ8バイトになるはずです。ただしコンパイラはデフォルトではメモリ上の表現が同一であることを保証しません。それを保証するためには構造体の定義に#[repr(transparent)]アトリビュートを付けます。
+
+### 内部表現とrepr(C)
+
+``` rust
+#[derive(Default)]
+struct A {
+    f0: u8,
+    f1: u32,
+    f2: u8,
+}
+
+let a: A = Default::default();
+println!(
+    "struct A ({} bytes)\n f0: {:p}\n f1: {:p}\n f2: {:p}\n",
+    std::mem::size_of::<A>(),
+    &a.f0,
+    &a.f1,
+    &a.f2
+);
+```
+
+```
+struct A (8 bytes)
+ f0: 0x7ffde26da294
+ f1: 0x7ffde26da290
+ f2: 0x7ffde26da295
+```
+
+``` rust
+#[derive(Default)]
+struct A {
+    f0: u8,
+    f1: u32,
+    f2: u8,
+    f3: u16,
+}
+
+let a: A = Default::default();
+println!(
+    "struct A ({} bytes)\n f0: {:p}\n f1: {:p}\n f2: {:p}\n f3: {:p}\n",
+    std::mem::size_of::<A>(),
+    &a.f0,
+    &a.f1,
+    &a.f2,
+    &a.f3
+);
+```
+
+```
+struct A (8 bytes)
+ f0: 0x7ffc94d05676
+ f1: 0x7ffc94d05670
+ f2: 0x7ffc94d05677
+ f3: 0x7ffc94d05674
+```
+
+## 5-4-2　複合型の型変換
+
+``` rust
+    let t1 = ('a', 42);
+    let t2 = t1 as (u32, u8);
+
+    let v1 = vec![b'h', b'e', b'l', b'l', b'o'];
+    let v2 = v1 as Vec<u16>;
+```
+
+```
+error[E0605]: non-primitive cast: `(char, i32)` as `(u32, u8)`
+   --> src/main.rs:462:14
+    |
+462 |     let t2 = t1 as (u32, u8);
+    |              ^^^^^^^^^^^^^^^
+    |
+    = note: an `as` expression can only be used to convert between primitive types. Consider using the `From` trait
+
+error[E0605]: non-primitive cast: `std::vec::Vec<u8>` as `std::vec::Vec<u16>`
+   --> src/main.rs:465:14
+    |
+465 |     let v2 = v1 as Vec<u16>;
+    |              ^^^^^^^^^^^^^^
+    |
+    = note: an `as` expression can only be used to convert between primitive types. Consider using the `From` trait
+
+error: aborting due to 2 previous errors
+```
+
+``` rust
+    let t3 = (t1.0 as u32, t1.0 as u8);
+    let v3 = v1.iter().map(|&n| n as u16).collect::<Vec<u16>>();
+
+    let v4: Vec<u8> = From::from("hello");
+    assert_eq!(v1, v4);
+```
+

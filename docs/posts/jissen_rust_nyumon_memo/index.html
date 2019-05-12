@@ -452,7 +452,7 @@ code, kbd, pre, samp {
       <div class="post-content">
         <nav id="TableOfContents">
 <ul>
-<li>
+<li><a href="#実践rust入門のメモ">実践Rust入門のメモ</a>
 <ul>
 <li><a href="#3-5-4-クロージャの型について">3-5-4　クロージャの型について</a>
 <ul>
@@ -498,11 +498,15 @@ code, kbd, pre, samp {
 <ul>
 <li><a href="#デフォルト値の設定">デフォルト値の設定</a></li>
 <li><a href="#タプル構造体">タプル構造体</a></li>
+<li><a href="#内部表現とrepr-c">内部表現とrepr&copy;</a></li>
 </ul></li>
+<li><a href="#5-4-2-複合型の型変換">5-4-2　複合型の型変換</a></li>
 </ul></li>
 </ul>
 </nav>
         
+
+<h1 id="実践rust入門のメモ">実践Rust入門のメモ</h1>
 
 <h2 id="3-5-4-クロージャの型について">3-5-4　クロージャの型について</h2>
 
@@ -926,6 +930,84 @@ error[E0308]: mismatched types
 <p>フィールドが1つのタプル構造体はゼロコスト抽象化の対象になり、そのメモリ上の表現は包んでいる型の表現と基本的に同じになります。たとえば上のId(400)のメモリ上のサイズは、u64型の400のメモリ上のサイズと同じ8バイトになるはずです。ただしコンパイラはデフォルトではメモリ上の表現が同一であることを保証しません。それを保証するためには構造体の定義に#[repr(transparent)]アトリビュートを付けます。</p>
 </blockquote>
 
+<h3 id="内部表現とrepr-c">内部表現とrepr&copy;</h3>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#93a1a1;font-style:italic">#[derive(Default)]</span>
+<span style="color:#859900">struct</span> <span style="color:#cb4b16">A</span> {
+    <span style="color:#268bd2">f0</span>: <span style="color:#859900;font-weight:bold">u8</span>,
+    <span style="color:#268bd2">f1</span>: <span style="color:#859900;font-weight:bold">u32</span>,
+    <span style="color:#268bd2">f2</span>: <span style="color:#859900;font-weight:bold">u8</span>,
+}
+
+<span style="color:#859900">let</span> <span style="color:#268bd2">a</span>: <span style="color:#cb4b16">A</span> = <span style="color:#cb4b16">Default</span>::<span style="color:#268bd2">default</span>();
+<span style="color:#268bd2">println</span>!(
+    <span style="color:#2aa198">&#34;struct A ({} bytes)\n f0: {:p}\n f1: {:p}\n f2: {:p}\n&#34;</span>,
+    <span style="color:#268bd2">std</span>::<span style="color:#268bd2">mem</span>::<span style="color:#268bd2">size_of</span>::&lt;<span style="color:#268bd2">A</span>&gt;(),
+    &amp;<span style="color:#268bd2">a</span>.<span style="color:#268bd2">f0</span>,
+    &amp;<span style="color:#268bd2">a</span>.<span style="color:#268bd2">f1</span>,
+    &amp;<span style="color:#268bd2">a</span>.<span style="color:#268bd2">f2</span>
+);
+</code></pre></div>
+<pre><code>struct A (8 bytes)
+ f0: 0x7ffde26da294
+ f1: 0x7ffde26da290
+ f2: 0x7ffde26da295
+</code></pre>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#93a1a1;font-style:italic">#[derive(Default)]</span>
+<span style="color:#859900">struct</span> <span style="color:#cb4b16">A</span> {
+    <span style="color:#268bd2">f0</span>: <span style="color:#859900;font-weight:bold">u8</span>,
+    <span style="color:#268bd2">f1</span>: <span style="color:#859900;font-weight:bold">u32</span>,
+    <span style="color:#268bd2">f2</span>: <span style="color:#859900;font-weight:bold">u8</span>,
+    <span style="color:#268bd2">f3</span>: <span style="color:#859900;font-weight:bold">u16</span>,
+}
+
+<span style="color:#859900">let</span> <span style="color:#268bd2">a</span>: <span style="color:#cb4b16">A</span> = <span style="color:#cb4b16">Default</span>::<span style="color:#268bd2">default</span>();
+<span style="color:#268bd2">println</span>!(
+    <span style="color:#2aa198">&#34;struct A ({} bytes)\n f0: {:p}\n f1: {:p}\n f2: {:p}\n f3: {:p}\n&#34;</span>,
+    <span style="color:#268bd2">std</span>::<span style="color:#268bd2">mem</span>::<span style="color:#268bd2">size_of</span>::&lt;<span style="color:#268bd2">A</span>&gt;(),
+    &amp;<span style="color:#268bd2">a</span>.<span style="color:#268bd2">f0</span>,
+    &amp;<span style="color:#268bd2">a</span>.<span style="color:#268bd2">f1</span>,
+    &amp;<span style="color:#268bd2">a</span>.<span style="color:#268bd2">f2</span>,
+    &amp;<span style="color:#268bd2">a</span>.<span style="color:#268bd2">f3</span>
+);
+</code></pre></div>
+<pre><code>struct A (8 bytes)
+ f0: 0x7ffc94d05676
+ f1: 0x7ffc94d05670
+ f2: 0x7ffc94d05677
+ f3: 0x7ffc94d05674
+</code></pre>
+
+<h2 id="5-4-2-複合型の型変換">5-4-2　複合型の型変換</h2>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">    <span style="color:#859900">let</span> <span style="color:#268bd2">t1</span> = (<span style="color:#2aa198">&#39;a&#39;</span>, <span style="color:#2aa198;font-weight:bold">42</span>);
+    <span style="color:#859900">let</span> <span style="color:#268bd2">t2</span> = <span style="color:#268bd2">t1</span> <span style="color:#859900">as</span> (<span style="color:#859900;font-weight:bold">u32</span>, <span style="color:#859900;font-weight:bold">u8</span>);
+
+    <span style="color:#859900">let</span> <span style="color:#268bd2">v1</span> = <span style="color:#268bd2">vec</span>![<span style="color:#2aa198">b&#39;h&#39;</span>, <span style="color:#2aa198">b&#39;e&#39;</span>, <span style="color:#2aa198">b&#39;l&#39;</span>, <span style="color:#2aa198">b&#39;l&#39;</span>, <span style="color:#2aa198">b&#39;o&#39;</span>];
+    <span style="color:#859900">let</span> <span style="color:#268bd2">v2</span> = <span style="color:#268bd2">v1</span> <span style="color:#859900">as</span> <span style="color:#cb4b16">Vec</span>&lt;<span style="color:#859900;font-weight:bold">u16</span>&gt;;
+</code></pre></div>
+<pre><code>error[E0605]: non-primitive cast: `(char, i32)` as `(u32, u8)`
+   --&gt; src/main.rs:462:14
+    |
+462 |     let t2 = t1 as (u32, u8);
+    |              ^^^^^^^^^^^^^^^
+    |
+    = note: an `as` expression can only be used to convert between primitive types. Consider using the `From` trait
+
+error[E0605]: non-primitive cast: `std::vec::Vec&lt;u8&gt;` as `std::vec::Vec&lt;u16&gt;`
+   --&gt; src/main.rs:465:14
+    |
+465 |     let v2 = v1 as Vec&lt;u16&gt;;
+    |              ^^^^^^^^^^^^^^
+    |
+    = note: an `as` expression can only be used to convert between primitive types. Consider using the `From` trait
+
+error: aborting due to 2 previous errors
+</code></pre>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">    <span style="color:#859900">let</span> <span style="color:#268bd2">t3</span> = (<span style="color:#268bd2">t1</span>.<span style="color:#2aa198;font-weight:bold">0</span> <span style="color:#859900">as</span> <span style="color:#859900;font-weight:bold">u32</span>, <span style="color:#268bd2">t1</span>.<span style="color:#2aa198;font-weight:bold">0</span> <span style="color:#859900">as</span> <span style="color:#859900;font-weight:bold">u8</span>);
+    <span style="color:#859900">let</span> <span style="color:#268bd2">v3</span> = <span style="color:#268bd2">v1</span>.<span style="color:#268bd2">iter</span>().<span style="color:#268bd2">map</span>(|&amp;<span style="color:#268bd2">n</span>| <span style="color:#268bd2">n</span> <span style="color:#859900">as</span> <span style="color:#859900;font-weight:bold">u16</span>).<span style="color:#268bd2">collect</span>::&lt;<span style="color:#cb4b16">Vec</span>&lt;<span style="color:#859900;font-weight:bold">u16</span>&gt;&gt;();
+
+    <span style="color:#859900">let</span> <span style="color:#268bd2">v4</span>: <span style="color:#cb4b16">Vec</span>&lt;<span style="color:#859900;font-weight:bold">u8</span>&gt; = <span style="color:#cb4b16">From</span>::<span style="color:#268bd2">from</span>(<span style="color:#2aa198">&#34;hello&#34;</span>);
+    <span style="color:#268bd2">assert_eq</span>!(<span style="color:#268bd2">v1</span>, <span style="color:#268bd2">v4</span>);
+</code></pre></div>
       </div>
     </div>
   </div>

@@ -17,7 +17,7 @@
       <pubDate>Thu, 02 May 2019 17:00:00 +0900</pubDate>
       
       <guid>https://blog.yuya373.dev/posts/jissen_rust_nyumon_memo/</guid>
-      <description>3-5-4 クロージャの型について Rustのクロージャの型は全て違う なぜならクロージャの型は個々のクロージャで異なり、2つとして同じ型がないからです。</description>
+      <description>実践Rust入門のメモ 3-5-4 クロージャの型について Rustのクロージャの型は全て違う なぜならクロージャの型は個々のクロージャで異なり、2つとして</description>
     </item>
     
   </channel>
