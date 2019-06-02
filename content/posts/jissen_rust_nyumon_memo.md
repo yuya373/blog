@@ -512,4 +512,86 @@ error: aborting due to 2 previous errors
     let v4: Vec<u8> = From::from("hello");
     assert_eq!(v1, v4);
 ```
+## 5-4-4　型強制
+### Deref, DerefMut
 
+
+``` rust
+fn f1(n: &mut usize, str: &str, slice: &[i32]) {
+    *n = str.len() + slice.len()
+}
+
+let mut b1 = Box::new(0);
+let s1 = String::from("deref");
+let v1 = vec![1, 2, 3];
+
+f1(&mut b1, &s1, &v1);
+assert_eq!(8, *b1);
+```
+
+- `&mut Box<usize>` → `&mut usize`
+- `&String` → `& str`
+- `&Vec<i32>` → `&[i32]`
+
+### ポインタの弱体化
+
+``` rust
+fn f1(slice: &[usize]) -> usize {
+    slice.len()
+}
+
+fn f2(slice: &mut [usize]) {
+    let len = f1(slice);
+    slice[0] = len;
+}
+
+let mut v = vec![0; 10];
+f2(&mut v);
+assert_eq!(10, v[0]);
+```
+
+- `&mut [usize]` → `&[usize]`
+
+### サイズの不定化：Unsize, CoerceUnsized
+
+``` rust
+fn f1(p: &[i32]) -> i32 {
+    p[0]
+}
+fn f2(p: Box<[i32]>) -> i32 {
+    p[0]
+}
+
+let a1 = [1, 2, 3, 4];
+assert_eq!(1, f1(&a1));
+assert_eq!(1, f2(Box::new(a1)));
+```
+
+- `&[i32; 4]` → `&[i32]`
+- `Box<[i32; 4]>` → `Box<[i32]>`
+
+> スライス[T]の要素数は実行するまで分かりませんので、コンパイル時にはデータサイズが決定できません。このような型はサイズ不定型（unsized type）に分類されます。
+
+``` rust
+let mut d: Box<std::fmt::Debug>;
+d = Box::new([1, 2]);
+d = Box::new(Some(1));
+```
+
+- `Box<[i32; 2]>` → `Box<std::fmt::Debug>`
+- `Box<Some<i32>>` → `Box<std::fmt::Debug>`
+
+
+### メソッドレシーバの型強制
+
+``` rust
+let v1: Vec<u8> = vec![3, 4, 5];
+assert_eq!(v1.first(), Some(&3u8));
+```
+
+- `Vec<u8>` → `&[u8]`
+
+1. Derefによる型強制 `Vec<u8>` → `[u8]`
+2. レシーバの参照化 `[u8]` → `&[u8]`
+
+>通常のDerefによる型強制では変換元がポインタであること（&T、&mut T、Box<T>など）が要求されます。一方、レシーバは単にT型であってもDerefによる型強制の対象になります。

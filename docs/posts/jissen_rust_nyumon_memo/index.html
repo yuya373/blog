@@ -357,7 +357,7 @@ code, kbd, pre, samp {
   
   
 
-  <meta name="generator" content="Hugo 0.55.5" />
+  <meta name="generator" content="Hugo 0.55.6" />
 
   
   <style>
@@ -375,7 +375,7 @@ code, kbd, pre, samp {
      vertical-align: middle;
  }
 
- code {
+ pre > code {
      background-color: transparent;
  }
 
@@ -501,6 +501,13 @@ code, kbd, pre, samp {
 <li><a href="#内部表現とrepr-c">内部表現とrepr&copy;</a></li>
 </ul></li>
 <li><a href="#5-4-2-複合型の型変換">5-4-2　複合型の型変換</a></li>
+<li><a href="#5-4-4-型強制">5-4-4　型強制</a>
+<ul>
+<li><a href="#deref-derefmut">Deref, DerefMut</a></li>
+<li><a href="#ポインタの弱体化">ポインタの弱体化</a></li>
+<li><a href="#サイズの不定化-unsize-coerceunsized">サイズの不定化：Unsize, CoerceUnsized</a></li>
+<li><a href="#メソッドレシーバの型強制">メソッドレシーバの型強制</a></li>
+</ul></li>
 </ul></li>
 </ul>
 </nav>
@@ -1008,6 +1015,90 @@ error: aborting due to 2 previous errors
     <span style="color:#859900">let</span> <span style="color:#268bd2">v4</span>: <span style="color:#cb4b16">Vec</span>&lt;<span style="color:#859900;font-weight:bold">u8</span>&gt; = <span style="color:#cb4b16">From</span>::<span style="color:#268bd2">from</span>(<span style="color:#2aa198">&#34;hello&#34;</span>);
     <span style="color:#268bd2">assert_eq</span>!(<span style="color:#268bd2">v1</span>, <span style="color:#268bd2">v4</span>);
 </code></pre></div>
+<h2 id="5-4-4-型強制">5-4-4　型強制</h2>
+
+<h3 id="deref-derefmut">Deref, DerefMut</h3>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#859900">fn</span> <span style="color:#268bd2">f1</span>(<span style="color:#268bd2">n</span>: <span style="color:#859900">&amp;</span><span style="color:#cb4b16">mut</span> <span style="color:#859900;font-weight:bold">usize</span>, <span style="color:#859900;font-weight:bold">str</span>: <span style="color:#859900">&amp;</span><span style="color:#859900;font-weight:bold">str</span>, <span style="color:#268bd2">slice</span>: <span style="color:#859900">&amp;</span>[<span style="color:#859900;font-weight:bold">i32</span>]) {
+    *<span style="color:#268bd2">n</span> = <span style="color:#859900;font-weight:bold">str</span>.<span style="color:#268bd2">len</span>() + <span style="color:#268bd2">slice</span>.<span style="color:#268bd2">len</span>()
+}
+
+<span style="color:#859900">let</span> <span style="color:#859900">mut</span> <span style="color:#268bd2">b1</span> = <span style="color:#cb4b16">Box</span>::<span style="color:#268bd2">new</span>(<span style="color:#2aa198;font-weight:bold">0</span>);
+<span style="color:#859900">let</span> <span style="color:#268bd2">s1</span> = <span style="color:#cb4b16">String</span>::<span style="color:#268bd2">from</span>(<span style="color:#2aa198">&#34;deref&#34;</span>);
+<span style="color:#859900">let</span> <span style="color:#268bd2">v1</span> = <span style="color:#268bd2">vec</span>![<span style="color:#2aa198;font-weight:bold">1</span>, <span style="color:#2aa198;font-weight:bold">2</span>, <span style="color:#2aa198;font-weight:bold">3</span>];
+
+<span style="color:#268bd2">f1</span>(&amp;<span style="color:#859900">mut</span> <span style="color:#268bd2">b1</span>, &amp;<span style="color:#268bd2">s1</span>, &amp;<span style="color:#268bd2">v1</span>);
+<span style="color:#268bd2">assert_eq</span>!(<span style="color:#2aa198;font-weight:bold">8</span>, *<span style="color:#268bd2">b1</span>);
+</code></pre></div>
+<ul>
+<li><code>&amp;mut Box&lt;usize&gt;</code> → <code>&amp;mut usize</code></li>
+<li><code>&amp;String</code> → <code>&amp; str</code></li>
+<li><code>&amp;Vec&lt;i32&gt;</code> → <code>&amp;[i32]</code></li>
+</ul>
+
+<h3 id="ポインタの弱体化">ポインタの弱体化</h3>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#859900">fn</span> <span style="color:#268bd2">f1</span>(<span style="color:#268bd2">slice</span>: <span style="color:#859900">&amp;</span>[<span style="color:#859900;font-weight:bold">usize</span>]) -&gt; <span style="color:#859900;font-weight:bold">usize</span> {
+    <span style="color:#268bd2">slice</span>.<span style="color:#268bd2">len</span>()
+}
+
+<span style="color:#859900">fn</span> <span style="color:#268bd2">f2</span>(<span style="color:#268bd2">slice</span>: <span style="color:#859900">&amp;</span><span style="color:#cb4b16">mut</span> [<span style="color:#859900;font-weight:bold">usize</span>]) {
+    <span style="color:#859900">let</span> <span style="color:#268bd2">len</span> = <span style="color:#268bd2">f1</span>(<span style="color:#268bd2">slice</span>);
+    <span style="color:#268bd2">slice</span>[<span style="color:#2aa198;font-weight:bold">0</span>] = <span style="color:#268bd2">len</span>;
+}
+
+<span style="color:#859900">let</span> <span style="color:#859900">mut</span> <span style="color:#268bd2">v</span> = <span style="color:#268bd2">vec</span>![<span style="color:#2aa198;font-weight:bold">0</span>; <span style="color:#2aa198;font-weight:bold">10</span>];
+<span style="color:#268bd2">f2</span>(&amp;<span style="color:#859900">mut</span> <span style="color:#268bd2">v</span>);
+<span style="color:#268bd2">assert_eq</span>!(<span style="color:#2aa198;font-weight:bold">10</span>, <span style="color:#268bd2">v</span>[<span style="color:#2aa198;font-weight:bold">0</span>]);
+</code></pre></div>
+<ul>
+<li><code>&amp;mut [usize]</code> → <code>&amp;[usize]</code></li>
+</ul>
+
+<h3 id="サイズの不定化-unsize-coerceunsized">サイズの不定化：Unsize, CoerceUnsized</h3>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#859900">fn</span> <span style="color:#268bd2">f1</span>(<span style="color:#268bd2">p</span>: <span style="color:#859900">&amp;</span>[<span style="color:#859900;font-weight:bold">i32</span>]) -&gt; <span style="color:#859900;font-weight:bold">i32</span> {
+    <span style="color:#268bd2">p</span>[<span style="color:#2aa198;font-weight:bold">0</span>]
+}
+<span style="color:#859900">fn</span> <span style="color:#268bd2">f2</span>(<span style="color:#268bd2">p</span>: <span style="color:#cb4b16">Box</span>&lt;[<span style="color:#859900;font-weight:bold">i32</span>]&gt;) -&gt; <span style="color:#859900;font-weight:bold">i32</span> {
+    <span style="color:#268bd2">p</span>[<span style="color:#2aa198;font-weight:bold">0</span>]
+}
+
+<span style="color:#859900">let</span> <span style="color:#268bd2">a1</span> = [<span style="color:#2aa198;font-weight:bold">1</span>, <span style="color:#2aa198;font-weight:bold">2</span>, <span style="color:#2aa198;font-weight:bold">3</span>, <span style="color:#2aa198;font-weight:bold">4</span>];
+<span style="color:#268bd2">assert_eq</span>!(<span style="color:#2aa198;font-weight:bold">1</span>, <span style="color:#268bd2">f1</span>(&amp;<span style="color:#268bd2">a1</span>));
+<span style="color:#268bd2">assert_eq</span>!(<span style="color:#2aa198;font-weight:bold">1</span>, <span style="color:#268bd2">f2</span>(<span style="color:#cb4b16">Box</span>::<span style="color:#268bd2">new</span>(<span style="color:#268bd2">a1</span>)));
+</code></pre></div>
+<ul>
+<li><code>&amp;[i32; 4]</code> → <code>&amp;[i32]</code></li>
+<li><code>Box&lt;[i32; 4]&gt;</code> → <code>Box&lt;[i32]&gt;</code></li>
+</ul>
+
+<blockquote>
+<p>スライス[T]の要素数は実行するまで分かりませんので、コンパイル時にはデータサイズが決定できません。このような型はサイズ不定型（unsized type）に分類されます。</p>
+</blockquote>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#859900">let</span> <span style="color:#859900">mut</span> <span style="color:#268bd2">d</span>: <span style="color:#cb4b16">Box</span>&lt;<span style="color:#268bd2">std</span>::<span style="color:#268bd2">fmt</span>::<span style="color:#268bd2">Debug</span>&gt;;
+<span style="color:#268bd2">d</span> = <span style="color:#cb4b16">Box</span>::<span style="color:#268bd2">new</span>([<span style="color:#2aa198;font-weight:bold">1</span>, <span style="color:#2aa198;font-weight:bold">2</span>]);
+<span style="color:#268bd2">d</span> = <span style="color:#cb4b16">Box</span>::<span style="color:#268bd2">new</span>(<span style="color:#cb4b16">Some</span>(<span style="color:#2aa198;font-weight:bold">1</span>));
+</code></pre></div>
+<ul>
+<li><code>Box&lt;[i32; 2]&gt;</code> → <code>Box&lt;std::fmt::Debug&gt;</code></li>
+<li><code>Box&lt;Some&lt;i32&gt;&gt;</code> → <code>Box&lt;std::fmt::Debug&gt;</code></li>
+</ul>
+
+<h3 id="メソッドレシーバの型強制">メソッドレシーバの型強制</h3>
+<div class="highlight"><pre style="color:#586e75;background-color:#eee8d5;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#859900">let</span> <span style="color:#268bd2">v1</span>: <span style="color:#cb4b16">Vec</span>&lt;<span style="color:#859900;font-weight:bold">u8</span>&gt; = <span style="color:#268bd2">vec</span>![<span style="color:#2aa198;font-weight:bold">3</span>, <span style="color:#2aa198;font-weight:bold">4</span>, <span style="color:#2aa198;font-weight:bold">5</span>];
+<span style="color:#268bd2">assert_eq</span>!(<span style="color:#268bd2">v1</span>.<span style="color:#268bd2">first</span>(), <span style="color:#cb4b16">Some</span>(&amp;<span style="color:#2aa198;font-weight:bold">3</span><span style="color:#859900">u8</span>));
+</code></pre></div>
+<ul>
+<li><code>Vec&lt;u8&gt;</code> → <code>&amp;[u8]</code></li>
+</ul>
+
+<ol>
+<li>Derefによる型強制 <code>Vec&lt;u8&gt;</code> → <code>[u8]</code></li>
+<li>レシーバの参照化 <code>[u8]</code> → <code>&amp;[u8]</code></li>
+</ol>
+
+<blockquote>
+<p>通常のDerefによる型強制では変換元がポインタであること（&amp;T、&amp;mut T、Box<T>など）が要求されます。一方、レシーバは単にT型であってもDerefによる型強制の対象になります。</p>
+</blockquote>
+
       </div>
     </div>
   </div>
